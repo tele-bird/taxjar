@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TaxHelper.Settings"
+    Title="Settings">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="editorStyle" TargetType="Editor">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+                <Setter Property="IsSpellCheckEnabled" Value="False"/>
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="AutoSize" Value="TextChanges"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Margin="20">
+            <Label Text="API Key" Style="{StaticResource labelStyle}"/>
+            <Editor Text="{Binding TaxJarApiKey}" Placeholder="(not set)" Style="{StaticResource editorStyle}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

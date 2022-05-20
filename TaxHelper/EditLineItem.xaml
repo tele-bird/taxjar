@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TaxHelper.EditLineItem"
+    Title="Edit Line Item">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="entryStyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+            </Style>
+            <Style x:Key="editorStyle" TargetType="Editor">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+                <Setter Property="IsSpellCheckEnabled" Value="False"/>
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="AutoSize" Value="TextChanges"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Margin="0">
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1.0*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Grid.Row="0" Text="Id" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding LineItem.Id}" Placeholder="enter id" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="1" Text="Quantity" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding LineItem.Quantity}" Placeholder="enter quantity" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="2" Text="Product Tax Code" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding LineItem.ProductTaxCode}" Placeholder="enter product tax code" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="3" Text="Unit Price" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding LineItem.UnitPrice}" Placeholder="enter unit price" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
+                <Label Grid.Column="0" Grid.Row="4" Text="Discount" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding LineItem.Discount}" Placeholder="enter discount" Style="{StaticResource entryStyle}"/>
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TaxHelper.TaxRateLookup"
+    Title="Tax Rates by Location">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="entryStyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+            </Style>
+            <Style x:Key="editorStyle" TargetType="Editor">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+                <Setter Property="IsSpellCheckEnabled" Value="False"/>
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="AutoSize" Value="TextChanges"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Margin="0">
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1.0*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Grid.Row="0" Text="Country" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding Location.Country}" Placeholder="enter country" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="1" Text="Zip" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding Location.Zip}" Placeholder="enter zip" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ZipEntryColor}"/>
+                <Label Grid.Column="0" Grid.Row="2" Text="State" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding Location.State}" Placeholder="enter state" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="3" Text="City" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding Location.City}" Placeholder="enter city" Style="{StaticResource entryStyle}"/>
+                <Label Grid.Column="0" Grid.Row="4" Text="Street" Style="{StaticResource labelStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding Location.Street}" Placeholder="enter street" Style="{StaticResource entryStyle}"/>
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Get Tax Rates" Command="{Binding GetTaxRatesCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
