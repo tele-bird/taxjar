@@ -10,23 +10,31 @@ namespace TaxHelper.ViewModels
     {
         public OrderLineItem LineItem { get; set; }
 
-        public bool WasSubmitted { get; set; }
-
         public ICommand SubmitCommand { get; set; }
-
         public ICommand CancelCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
 
-        public EditLineItemViewModel(INavigation navigation)
+        public Action<OrderLineItem> HandleSubmit;
+        public Action<OrderLineItem> HandleDelete;
+
+        public EditLineItemViewModel(INavigation navigation, OrderLineItem lineItem)
             : base(navigation)
         {
+            LineItem = (lineItem != null) ? lineItem : new OrderLineItem();
             SubmitCommand = new Command(Submit);
             CancelCommand = new Command(Cancel);
-            LineItem = new OrderLineItem();
+            DeleteCommand = new Command(Delete);
         }
 
-        private async void Cancel()
+        private async void Delete(object obj)
         {
-            await Navigation.PopAsync();
+            await Navigation.PopModalAsync();
+            HandleDelete(LineItem);
+        }
+
+        private async void Cancel(object obj)
+        {
+            await Navigation.PopModalAsync();
         }
 
         private async void Submit()
@@ -35,8 +43,8 @@ namespace TaxHelper.ViewModels
             try
             {
                 ThrowIfInvalidValues();
-                WasSubmitted = true;
-                await Navigation.PopAsync();
+                await Navigation.PopModalAsync();
+                HandleSubmit(LineItem);
             }
             catch (Exception exc)
             {

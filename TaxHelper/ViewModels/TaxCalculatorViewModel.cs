@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using TaxHelper.Models;
 using TaxHelper.Services;
@@ -7,10 +8,8 @@ using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
-    public class TaxCalculatorViewModel : BaseViewModel
+    public class TaxCalculatorViewModel : StickyViewModel<Order>
     {
-        public Order Order { get; private set; }
-
         public ObservableCollection<OrderLineItem> LineItems { get; private set; } = new ObservableCollection<OrderLineItem>();
 
         public string LineItemsDescription => $"{LineItems.Count} line items totaling {GetLineItemsTotal()}";
@@ -29,8 +28,6 @@ namespace TaxHelper.ViewModels
             return total;
         }
 
-        public ICommand AddLineItemCommand { get; set; }
-
         public ICommand ViewLineItemsCommand { get; set; }
 
         public ICommand ViewNexusAddressesCommand { get; set; }
@@ -41,40 +38,16 @@ namespace TaxHelper.ViewModels
             : base(navigation)
         {
             Navigation = navigation;
-            Order = new Order();
-            AddLineItemCommand = new Command(AddLineItem);
             ViewLineItemsCommand = new Command(ViewLineItems);
             ViewNexusAddressesCommand = new Command(ViewNexusAddresses);
             GetTaxCommand = new Command(GetTax);
-            //LineItems.Add(new OrderLineItem { Id = "1", Quantity = 5, ProductTaxCode = "abc", UnitPrice = 3.2f, Discount = 1.0f });
-            //LineItems.Add(new OrderLineItem { Id = "2", Quantity = 5, ProductTaxCode = "abc", UnitPrice = 3.2f, Discount = 1.0f });
-            //LineItems.Add(new OrderLineItem { Id = "3", Quantity = 5, ProductTaxCode = "abc", UnitPrice = 3.2f, Discount = 1.0f });
-            //LineItems.Add(new OrderLineItem { Id = "4", Quantity = 5, ProductTaxCode = "abc", UnitPrice = 3.2f, Discount = 1.0f });
-            //LineItems.Add(new OrderLineItem { Id = "5", Quantity = 5, ProductTaxCode = "abc", UnitPrice = 3.2f, Discount = 1.0f });
-        }
-
-        private async void AddLineItem()
-        {
-            var editLineItem = new EditLineItem();
-            var editLineItemViewModel = (EditLineItemViewModel)editLineItem.BindingContext;
-            await Navigation.PushAsync(editLineItem);
-            if(editLineItemViewModel.WasSubmitted)
-            {
-                LineItems.Add(editLineItemViewModel.LineItem);
-            }
         }
 
         private async void ViewLineItems()
         {
-            HandleError("View line items is not plugged in yet.");
-            //var viewLineItems = new ViewLineItems();
-            //var viewLineItemsViewModel = (ViewLineItemsViewModel)viewLineItems.BindingContext;
-            //await Navigation.PushAsync(viewLineItems);
-            //LineItems.Clear();
-            //foreach(var lineItem in viewLineItemsViewModel.LineItems)
-            //{
-            //    LineItems.Add(lineItem);
-            //}
+            var viewLineItems = new ViewLineItems(this.LineItems.ToArray<OrderLineItem>());
+            var viewLineItemsViewModel = (ViewLineItemsViewModel)viewLineItems.BindingContext;
+            await Navigation.PushAsync(viewLineItems);
         }
 
         private async void ViewNexusAddresses()
@@ -88,14 +61,14 @@ namespace TaxHelper.ViewModels
             try
             {
                 // let the Order tell us whether it is valid:
-                var orderErrors = Order.GetErrors();
+                var orderErrors = StickyDto.GetErrors();
                 if(orderErrors.Count > 0)
                 {
                     throw new MultipleErrorsException(orderErrors);
                 }
 
                 // calculate the tax:
-                var result = await TaxService.Instance.GetTaxesForOrder(Order);
+                var result = await TaxService.Instance.GetTaxesForOrder(StickyDto);
 
                 // navigate to results page:
                 var taxResults = new TaxResults();

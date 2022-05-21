@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TaxHelper.Dto;
 using TaxHelper.Models;
 
 namespace TaxHelper.Services
@@ -17,7 +17,7 @@ namespace TaxHelper.Services
             {
                 if(mInstance == null)
                 {
-                    var settings = SettingsService.Instance.Settings;
+                    var settings = SettingsService<AppSettingsDto>.Instance.Settings;
                     mInstance = new TaxService(new TaxJarTaxCalculator(settings.TaxJarApiKey));
                 }
                 return mInstance;

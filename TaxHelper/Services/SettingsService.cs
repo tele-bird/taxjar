@@ -1,33 +1,36 @@
 ﻿using System;
-using MonkeyCache.FileStore;
+using Newtonsoft.Json;
 using TaxHelper.Models;
 using Xamarin.Essentials;
 
 namespace TaxHelper.Services
 {
-    public class SettingsService
+    public class SettingsService<T> : ISettingsService<T>
     {
-        public AppSettings Settings
+        private string mKey;
+        private string mDefaultValue;
+
+        public T Settings
         {
             get
             {
-                return Barrel.Current.Get<AppSettings>("settings");
+                return JsonConvert.DeserializeObject<T>(Preferences.Get(mKey, mDefaultValue));
             }
             set
             {
-                Barrel.Current.Add<AppSettings>("settings", value, TimeSpan.MaxValue);
+                Preferences.Set(mKey, JsonConvert.SerializeObject(value));
             }
         }
 
         #region Singleton
-        private static SettingsService mInstance;
-        public static SettingsService Instance
+        private static SettingsService<T> mInstance;
+        public static SettingsService<T> Instance
         {
             get
             {
                 if (mInstance == null)
                 {
-                    mInstance = new SettingsService();
+                    mInstance = new SettingsService<T>();
                 }
                 return mInstance;
             }
@@ -35,7 +38,9 @@ namespace TaxHelper.Services
 
         private SettingsService()
         {
-            Barrel.ApplicationId = AppInfo.PackageName;
+            mKey = typeof(T).FullName;
+            var defaultInstance = Activator.CreateInstance<T>();
+            mDefaultValue = JsonConvert.SerializeObject(defaultInstance);
         }
         #endregion
     }

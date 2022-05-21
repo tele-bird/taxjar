@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+
 namespace TaxHelper.Dto
 {
     public class TaxJarErrorResponseDto

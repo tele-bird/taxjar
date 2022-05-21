@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TaxHelper.ViewModels;
+﻿using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
 namespace TaxHelper
@@ -18,6 +16,18 @@ namespace TaxHelper
         private async void ShowAlert(string message)
         {
             await this.DisplayAlert("Error", message, "OK");
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ((TaxCalculatorViewModel)BindingContext).AppearingCommand.Execute(null);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ((TaxCalculatorViewModel)BindingContext).DisappearingCommand.Execute(null);
         }
     }
 }

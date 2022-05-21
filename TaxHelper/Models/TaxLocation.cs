@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TaxHelper.Models
 {
-    public class TaxLocation
+    public class TaxLocation : IBaseModel
     {
         public string Country { get; set; }
         public string Zip { get; set; }

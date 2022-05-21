@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+
 namespace TaxHelper.Models
 {
     public class NexusAddress

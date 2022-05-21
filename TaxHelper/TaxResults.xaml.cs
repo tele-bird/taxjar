@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TaxHelper.ViewModels;
+﻿using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
 namespace TaxHelper

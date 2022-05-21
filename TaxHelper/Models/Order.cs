@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace TaxHelper.Models
 {
-    public class Order
+    public class Order : IBaseModel
     {
         [JsonProperty(PropertyName ="from_country")]
         public string FromCountry { get; set; }

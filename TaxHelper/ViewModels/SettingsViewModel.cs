@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TaxHelper.Models;
+﻿using TaxHelper.Dto;
 using TaxHelper.Services;
 using Xamarin.Forms;
 
@@ -8,7 +6,7 @@ namespace TaxHelper.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
-        private TaxHelper.Models.AppSettings mSettings;
+        private AppSettingsDto mSettings;
 
         public string TaxJarApiKey
         {
@@ -20,10 +18,10 @@ namespace TaxHelper.ViewModels
             {
                 if(mSettings == null)
                 {
-                    mSettings = new AppSettings();
+                    mSettings = new AppSettingsDto();
                 }
                 mSettings.TaxJarApiKey = value;
-                SettingsService.Instance.Settings = mSettings;
+                SettingsService<AppSettingsDto>.Instance.Settings = mSettings;
                 OnPropertyChanged();
             }
         }
@@ -31,7 +29,7 @@ namespace TaxHelper.ViewModels
         public SettingsViewModel(INavigation navigation)
             : base(navigation)
         {
-            mSettings = SettingsService.Instance.Settings;
+            mSettings = SettingsService<AppSettingsDto>.Instance.Settings;
         }
     }
 }

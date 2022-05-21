@@ -26,7 +26,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Margin="0">
+        <StackLayout Orientation="Vertical" Margin="0" VerticalOptions="Center">
             <Grid Margin="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -52,8 +52,9 @@
                 <Entry Grid.Column="1" Grid.Row="3" Text="{Binding LineItem.UnitPrice}" Placeholder="enter unit price" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
                 <Label Grid.Column="0" Grid.Row="4" Text="Discount" Style="{StaticResource labelStyle}"/>
                 <Entry Grid.Column="1" Grid.Row="4" Text="{Binding LineItem.Discount}" Placeholder="enter discount" Style="{StaticResource entryStyle}"/>
-                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" TextColor="White" BackgroundColor="#2196F3"/>
-                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" TextColor="White" BackgroundColor="#2196F3"/>
+                <Button Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteCommand}" TextColor="White" BackgroundColor="DarkRed"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

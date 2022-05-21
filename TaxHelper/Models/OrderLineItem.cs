@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace TaxHelper.Models
 {
-    public class OrderLineItem
+    public class OrderLineItem : IBaseModel
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
@@ -19,6 +20,34 @@ namespace TaxHelper.Models
 
         [JsonProperty(PropertyName = "discount")]
         public float? Discount { get; set; }
+
+        public override string ToString()
+        {
+            float? total = Quantity * UnitPrice - Discount;
+            return $"ID{Id}:  {Quantity}@{UnitPrice}ea = {Quantity * UnitPrice}  Discount: {Discount}  Total: {total.Value.ToString("C")}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return typeof(OrderLineItem).Equals(obj.GetType()) && ((OrderLineItem)obj).Id.Equals(Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public void Update(OrderLineItem editedLineItem)
+        {
+            if(!Id.Equals(editedLineItem.Id))
+            {
+                throw new Exception("Id mismatch detected");
+            }
+            Quantity = editedLineItem.Quantity;
+            ProductTaxCode = editedLineItem.ProductTaxCode;
+            UnitPrice = editedLineItem.UnitPrice;
+            Discount = editedLineItem.Discount;
+        }
 
         public IList<string> GetErrors()
         {

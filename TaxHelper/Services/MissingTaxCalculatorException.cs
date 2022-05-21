@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace TaxHelper.Services
 {
     public class MissingTaxCalculatorException : Exception
