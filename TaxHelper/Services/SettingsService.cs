@@ -8,13 +8,14 @@ namespace TaxHelper.Services
     public class SettingsService<T> : ISettingsService<T>
     {
         private string mKey;
-        private string mDefaultValue;
+        //private string mDefaultValue;
 
         public T Settings
         {
             get
             {
-                return JsonConvert.DeserializeObject<T>(Preferences.Get(mKey, mDefaultValue));
+                var stringSetting = Preferences.Get(mKey, null);
+                return (null != stringSetting) ? JsonConvert.DeserializeObject<T>(stringSetting) : Activator.CreateInstance<T>();
             }
             set
             {
@@ -39,8 +40,8 @@ namespace TaxHelper.Services
         private SettingsService()
         {
             mKey = typeof(T).FullName;
-            var defaultInstance = Activator.CreateInstance<T>();
-            mDefaultValue = JsonConvert.SerializeObject(defaultInstance);
+            //var defaultInstance = Activator.CreateInstance<T>();
+            //mDefaultValue = JsonConvert.SerializeObject(defaultInstance, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
         #endregion
     }

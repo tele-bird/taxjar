@@ -10,22 +10,26 @@ namespace TaxHelper.ViewModels
 {
     public class TaxCalculatorViewModel : StickyViewModel<Order>
     {
-        public ObservableCollection<OrderLineItem> LineItems { get; private set; } = new ObservableCollection<OrderLineItem>();
-
-        public string LineItemsDescription => $"{LineItems.Count} line items totaling {GetLineItemsTotal()}";
-
-        public ObservableCollection<NexusAddress> Addresses { get; private set; } = new ObservableCollection<NexusAddress>();
-
-        public string NexusAddressesDescription => $"{Addresses.Count} addresses";
-
-        private float? GetLineItemsTotal()
+        private string mLineItemsDescription;
+        public string LineItemsDescription
         {
-            float? total = 0;
-            foreach (var lineItem in LineItems)
+            get { return mLineItemsDescription; }
+            set
             {
-                total += lineItem.Quantity * lineItem.UnitPrice;
+                mLineItemsDescription = value;
+                OnPropertyChanged();
             }
-            return total;
+        }
+
+        private string mAddressesDescription;
+        public string AddressesDescription
+        {
+            get { return mAddressesDescription; }
+            set
+            {
+                mAddressesDescription = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand ViewLineItemsCommand { get; set; }
@@ -34,8 +38,8 @@ namespace TaxHelper.ViewModels
 
         public ICommand GetTaxCommand { get; set; }
 
-        public TaxCalculatorViewModel(INavigation navigation)
-            : base(navigation)
+        public TaxCalculatorViewModel(INavigation navigation, Action<string> handleError)
+            : base(navigation, handleError)
         {
             Navigation = navigation;
             ViewLineItemsCommand = new Command(ViewLineItems);
@@ -45,14 +49,31 @@ namespace TaxHelper.ViewModels
 
         private async void ViewLineItems()
         {
-            var viewLineItems = new ViewLineItems(this.LineItems.ToArray<OrderLineItem>());
-            var viewLineItemsViewModel = (ViewLineItemsViewModel)viewLineItems.BindingContext;
-            await Navigation.PushAsync(viewLineItems);
+            var viewLineItems = new ViewLineItems(null, OnLineItemsUpdated, StickyDto.LineItems.ToArray<OrderLineItem>());
+            await Navigation.PushModalAsync(viewLineItems);
         }
 
-        private async void ViewNexusAddresses()
+        private void ViewNexusAddresses()
         {
             HandleError("View addresses is not plugged in yet.");
+        }
+
+        private void OnLineItemsUpdated(OrderLineItem[] updatedLineItems)
+        {
+            StickyDto.LineItems = updatedLineItems;
+            //OnPropertyChanged(nameof(StickyDto));
+            UpdateLineItemsDescription();
+        }
+
+        private void UpdateLineItemsDescription()
+        {
+            LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.TotalCost:C}";
+        }
+
+        protected override void OnAppearingFirstTime(object obj)
+        {
+            base.OnAppearingFirstTime(obj); // StickyDto is set in the base class implementation
+            UpdateLineItemsDescription();
         }
 
         private async void GetTax()

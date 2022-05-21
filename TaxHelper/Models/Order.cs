@@ -53,6 +53,26 @@ namespace TaxHelper.Models
         [JsonProperty(PropertyName ="line_items")]
         public OrderLineItem[] LineItems { get; set; }
 
+        [JsonIgnore]
+        public float TotalCost
+        {
+            get
+            {
+                float? total = 0;
+                foreach (var lineItem in LineItems)
+                {
+                    total += lineItem.Quantity * lineItem.UnitPrice - lineItem.Discount;
+                }
+                return total.Value;
+            }
+        }
+
+        public Order()
+        {
+            Addresses = new NexusAddress[0];
+            LineItems = new OrderLineItem[0];
+        }
+
         public IList<string> GetErrors()
         {
             IList<string> errors = new List<string>();

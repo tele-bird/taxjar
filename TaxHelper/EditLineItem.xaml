@@ -15,13 +15,15 @@
                 <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
                 <Setter Property="PlaceholderColor" Value="LightGray"/>
             </Style>
-            <Style x:Key="editorStyle" TargetType="Editor">
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="Padding" Value="10"/>
                 <Setter Property="TextColor" Value="White"/>
-                <Setter Property="BackgroundColor" Value="Gray"/>
-                <Setter Property="PlaceholderColor" Value="LightGray"/>
-                <Setter Property="IsSpellCheckEnabled" Value="False"/>
-                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
-                <Setter Property="AutoSize" Value="TextChanges"/>
+                <Setter Property="BackgroundColor" Value="#2196F3"/>
+            </Style>
+            <Style x:Key="buttonStyleDelete" TargetType="Button">
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="DarkRed"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -52,9 +54,9 @@
                 <Entry Grid.Column="1" Grid.Row="3" Text="{Binding LineItem.UnitPrice}" Placeholder="enter unit price" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
                 <Label Grid.Column="0" Grid.Row="4" Text="Discount" Style="{StaticResource labelStyle}"/>
                 <Entry Grid.Column="1" Grid.Row="4" Text="{Binding LineItem.Discount}" Placeholder="enter discount" Style="{StaticResource entryStyle}"/>
-                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" TextColor="White" BackgroundColor="#2196F3"/>
-                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" TextColor="White" BackgroundColor="#2196F3"/>
-                <Button Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteCommand}" TextColor="White" BackgroundColor="DarkRed"/>
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" Style="{StaticResource buttonStyle}"/>
+                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource buttonStyle}"/>
+                <Button Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding IsDeleteButtonVisible}" Style="{StaticResource buttonStyleDelete}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

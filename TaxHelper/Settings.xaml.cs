@@ -1,4 +1,5 @@
-﻿using TaxHelper.ViewModels;
+﻿using System;
+using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
 namespace TaxHelper
@@ -8,7 +9,7 @@ namespace TaxHelper
         public Settings()
         {
             InitializeComponent();
-            BindingContext = new SettingsViewModel(Navigation);
+            BindingContext = new SettingsViewModel(Navigation, null);
         }
     }
 }

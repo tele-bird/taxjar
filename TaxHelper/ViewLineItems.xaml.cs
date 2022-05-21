@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaxHelper.Models;
 using TaxHelper.ViewModels;
 using Xamarin.Forms;
@@ -7,11 +9,12 @@ namespace TaxHelper
 {
     public partial class ViewLineItems : ContentPage
     {
-        public ViewLineItems(params OrderLineItem[] lineItems)
+        private Action<OrderLineItem[]> mHandleUpdate;
+
+        public ViewLineItems(Action<string> handleError, Action<OrderLineItem[]> handleDone, params OrderLineItem[] lineItems)
         {
             InitializeComponent();
-            var viewModel = new ViewLineItemsViewModel(Navigation, lineItems);
-            viewModel.HandleError += ShowAlert;
+            var viewModel = new ViewLineItemsViewModel(Navigation, handleError, handleDone, lineItems);
             BindingContext = viewModel;
         }
 

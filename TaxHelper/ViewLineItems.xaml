@@ -2,14 +2,24 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:behaviors="clr-namespace:TaxHelper.Behaviors"
+    xmlns:converters="clr-namespace:TaxHelper.Converters"
     x:Class="TaxHelper.ViewLineItems"
+    ios:Page.UseSafeArea="true"
     Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
             <Style x:Key="labelStyle" TargetType="Label">
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="FontSize" Value="Micro"/>
                 <Setter Property="BackgroundColor" Value="Yellow"/>
+            </Style>
+            <Style x:Key="labelHeaderStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
             </Style>
             <Style x:Key="entryStyle" TargetType="Entry">
                 <Setter Property="TextColor" Value="White"/>
@@ -32,15 +42,30 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Margin="0">
+            <Label Text="{Binding Title}" Style="{StaticResource labelHeaderStyle}"/>
             <RefreshView IsRefreshing="{Binding IsRefreshing}">
                 <StackLayout Orientation="Vertical">
                     <ListView ItemsSource="{Binding LineItems}"
                               x:Name="mLineItemsListView"
                               SelectionMode="Single"
-                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                              SeparatorVisibility="Default"
+                              SeparatorColor="#2196F3">
+                        <ListView.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                EventName="ItemSelected"
+                                Command="{Binding LineItemSelectedCommand}"
+                                Converter="{StaticResource SelectedItemConverter}" />
+                        </ListView.Behaviors>
+                        <!--<ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding Description}" Style="{StaticResource labelStyle}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>-->
                     </ListView>
                 </StackLayout>
             </RefreshView>
+            <Button Text="Add" Style="{StaticResource buttonStyle}" Command="{Binding AddCommand}"/>
+            <Button Text="Done" Style="{StaticResource buttonStyle}" Command="{Binding DoneCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

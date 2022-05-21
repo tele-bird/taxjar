@@ -21,10 +21,13 @@ namespace TaxHelper.Models
         [JsonProperty(PropertyName = "discount")]
         public float? Discount { get; set; }
 
+        [JsonIgnoreAttribute]
+        public string Description => ToString();
+
         public override string ToString()
         {
             float? total = Quantity * UnitPrice - Discount;
-            return $"ID{Id}:  {Quantity}@{UnitPrice}ea = {Quantity * UnitPrice}  Discount: {Discount}  Total: {total.Value.ToString("C")}";
+            return $"{Id}:  {Quantity}@{UnitPrice}ea = {Quantity * UnitPrice}  Disc: {Discount}  Total: {total.Value.ToString("C")}";
         }
 
         public override bool Equals(object obj)

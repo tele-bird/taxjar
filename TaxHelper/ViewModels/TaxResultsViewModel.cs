@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
@@ -17,8 +18,8 @@ namespace TaxHelper.ViewModels
 
         public string Title { get; set; }
 
-        public TaxResultsViewModel(INavigation navigation)
-            : base(navigation)
+        public TaxResultsViewModel(INavigation navigation, Action<string> handleError)
+            : base(navigation, handleError)
         {
         }
     }

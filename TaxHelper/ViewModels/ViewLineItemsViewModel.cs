@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
+//using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TaxHelper.Models;
@@ -12,6 +13,11 @@ namespace TaxHelper.ViewModels
     public class ViewLineItemsViewModel : BaseViewModel
     {
         public ObservableCollection<OrderLineItem> LineItems { get; private set; } = new ObservableCollection<OrderLineItem>();
+
+        public ICommand LineItemSelectedCommand { get; private set; }
+        public ICommand DoneCommand { get; private set; }
+
+        private Action<OrderLineItem[]> mHandleDone;
 
         private string mTitle;
         public string Title
@@ -35,20 +41,6 @@ namespace TaxHelper.ViewModels
             }
         }
 
-        private OrderLineItem mSelectedItem;
-        public OrderLineItem SelectedItem
-        {
-            get { return mSelectedItem; }
-            set
-            {
-                mSelectedItem = value;
-                if(null != mSelectedItem)
-                {
-                    Edit(mSelectedItem);
-                }
-            }
-        }
-
         private async Task RefreshLineItemsAsync(params OrderLineItem[] lineItems)
         {
             IsRefreshing = true;
@@ -64,56 +56,56 @@ namespace TaxHelper.ViewModels
 
         public ICommand AddCommand { get; set; }
 
-        public ViewLineItemsViewModel(INavigation navigation, params OrderLineItem[] lineItems)
-            : base(navigation)
+        public ViewLineItemsViewModel(INavigation navigation, Action<string> handleError, Action<OrderLineItem[]> handleDone, params OrderLineItem[] lineItems)
+            : base(navigation, handleError)
         {
+            LineItemSelectedCommand = new Command<OrderLineItem>(Edit);
+            mHandleDone = handleDone;
+            DoneCommand = new Command(Done);
             AddCommand = new Command(Add);
-            RefreshLineItemsAsync(lineItems);
+            LineItems.Clear();
+            foreach (var lineItem in lineItems)
+            {
+                LineItems.Add(lineItem);
+            }
+            Title = $"{LineItems.Count} Line Items";
+        }
+
+        private async void Done(object obj)
+        {
+            await Navigation.PopModalAsync();
+            mHandleDone.Invoke(LineItems.ToArray<OrderLineItem>());
         }
 
         private async void Add(object obj)
         {
-            var editLineItem = new EditLineItem();
-            var editLineItemViewModel = (EditLineItemViewModel)editLineItem.BindingContext;
-            editLineItemViewModel.HandleSubmit += OnAdded;
+            var editLineItem = new EditLineItem(OnAdded);
             await Navigation.PushModalAsync(editLineItem);
         }
 
         private async void Edit(OrderLineItem lineItem)
         {
-            var editLineItem = new EditLineItem(lineItem);
-            var editLineItemViewModel = (EditLineItemViewModel)editLineItem.BindingContext;
-            editLineItemViewModel.HandleSubmit += OnEdited;
-            editLineItemViewModel.HandleDelete += OnDeleted;
-            await Navigation.PushModalAsync(editLineItem);
+            if(null != lineItem)
+            {
+                var editLineItem = new EditLineItem(lineItem, OnEdited, OnDeleted);
+                await Navigation.PushModalAsync(editLineItem);
+            }
         }
 
-        private async void OnAdded(OrderLineItem addedLineItem)
+        private void OnAdded(OrderLineItem addedLineItem)
         {
-            IsRefreshing = true;
             LineItems.Add(addedLineItem);
             Title = $"{LineItems.Count} Line Items";
-            IsRefreshing = false;
-            //await AddLineItemAsync(addedLineItem);
         }
 
-        private async void OnEdited(OrderLineItem editedLineItem)
+        private void OnEdited(OrderLineItem editedLineItem)
         {
-            foreach (var lineItem in LineItems)
-            {
-                if (lineItem.Id.Equals(editedLineItem.Id))
-                {
-                    lineItem.Update(editedLineItem);
-                    break;
-                }
-            }
-            RefreshLineItemsAsync(LineItems.ToArray<OrderLineItem>());
+            LineItems[LineItems.IndexOf(editedLineItem)] = editedLineItem;
         }
 
-        private async void OnDeleted(OrderLineItem deletedLineItem)
+        private void OnDeleted(OrderLineItem deletedLineItem)
         {
             LineItems.Remove(deletedLineItem);
-            RefreshLineItemsAsync(LineItems.ToArray<OrderLineItem>());
         }
     }
 }

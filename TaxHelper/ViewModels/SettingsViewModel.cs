@@ -1,4 +1,5 @@
-﻿using TaxHelper.Dto;
+﻿using System;
+using TaxHelper.Dto;
 using TaxHelper.Services;
 using Xamarin.Forms;
 
@@ -26,8 +27,8 @@ namespace TaxHelper.ViewModels
             }
         }
 
-        public SettingsViewModel(INavigation navigation)
-            : base(navigation)
+        public SettingsViewModel(INavigation navigation, Action<string> handleError)
+            : base(navigation, handleError)
         {
             mSettings = SettingsService<AppSettingsDto>.Instance.Settings;
         }

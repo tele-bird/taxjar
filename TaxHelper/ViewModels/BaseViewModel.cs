@@ -10,11 +10,12 @@ namespace TaxHelper.ViewModels
     {
         protected INavigation Navigation { get; set; }
 
-        public Action<string> HandleError;
+        protected Action<string> HandleError { get; private set; }
 
-        protected BaseViewModel(INavigation navigation)
+        protected BaseViewModel(INavigation navigation, Action<string> handleError)
         {
             Navigation = navigation;
+            HandleError = handleError;
         }
 
         #region INotifyPropertyChanged

@@ -8,8 +8,7 @@ namespace TaxHelper
         public TaxCalculator()
         {
             InitializeComponent();
-            var viewModel = new TaxCalculatorViewModel(Navigation);
-            viewModel.HandleError += ShowAlert;
+            var viewModel = new TaxCalculatorViewModel(Navigation, ShowAlert);
             BindingContext = viewModel;
         }
 

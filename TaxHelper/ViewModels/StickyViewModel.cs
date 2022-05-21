@@ -21,6 +21,8 @@ namespace TaxHelper.ViewModels
     /// <typeparam name="T">The Type of Dto that is bound to the View.</typeparam>
     public class StickyViewModel<T> : BaseViewModel
     {
+        private bool mAppeared;
+
         private T mStickyDto;
         public T StickyDto
         {
@@ -36,9 +38,10 @@ namespace TaxHelper.ViewModels
 
         public ICommand DisappearingCommand { get; set; }
 
-        protected StickyViewModel(INavigation navigation)
-            : base(navigation)
+        protected StickyViewModel(INavigation navigation, Action<string> handleError)
+            : base(navigation, handleError)
         {
+            mAppeared = false;
             AppearingCommand = new Command(OnAppearing);
             DisappearingCommand = new Command(OnDisppearing);
         }
@@ -49,6 +52,15 @@ namespace TaxHelper.ViewModels
         }
 
         protected virtual void OnAppearing(object obj)
+        {
+            if (!mAppeared)
+            {
+                mAppeared = true;
+                OnAppearingFirstTime(obj);
+            }
+        }
+
+        protected virtual void OnAppearingFirstTime(object obj)
         {
             StickyDto = SettingsService<T>.Instance.Settings;
         }

@@ -1,4 +1,5 @@
-﻿using TaxHelper.ViewModels;
+﻿using System;
+using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
 namespace TaxHelper
@@ -8,8 +9,7 @@ namespace TaxHelper
         public TaxRateLookup()
         {
             InitializeComponent();
-            var viewModel = new TaxRateLookupViewModel(Navigation);
-            viewModel.HandleError += ShowAlert;
+            var viewModel = new TaxRateLookupViewModel(Navigation, ShowAlert);
             BindingContext = viewModel;
         }
 

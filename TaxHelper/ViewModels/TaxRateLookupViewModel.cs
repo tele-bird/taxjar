@@ -10,8 +10,8 @@ namespace TaxHelper.ViewModels
     {
         public ICommand GetTaxRatesCommand { get; set; }
 
-        public TaxRateLookupViewModel(INavigation navigation)
-            : base(navigation)
+        public TaxRateLookupViewModel(INavigation navigation, Action<string> handleError)
+            : base(navigation, handleError)
         {
             GetTaxRatesCommand = new Command(LookupTaxRates);
         }

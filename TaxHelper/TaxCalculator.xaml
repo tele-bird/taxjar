@@ -7,6 +7,12 @@
         <ResourceDictionary>
             <Style x:Key="labelStyle" TargetType="Label">
                 <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="LineBreakMode" Value="NoWrap"/>
+            </Style>
+            <Style x:Key="labelStyleGray" TargetType="Label">
+                <Setter Property="TextColor" Value="Gray"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="LineBreakMode" Value="NoWrap"/>
             </Style>
             <Style x:Key="entryStyle" TargetType="Entry">
                 <Setter Property="TextColor" Value="White"/>
@@ -30,62 +36,64 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Margin="0">
-            <Grid Margin="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1.0*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Text="From Country" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromCountry}" Placeholder="enter from country" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="1" Text="From Zip" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromZip}" Placeholder="enter from zip" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="2" Text="From State" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromState}" Placeholder="enter from state" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="3" Text="From City" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromCity}" Placeholder="enter from city" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="4" Text="From Street" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromStreet}" Placeholder="enter from street" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="5" Text="To Country" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToCountry}" Placeholder="enter to country" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
-                <Label Grid.Column="0" Grid.Row="6" Text="To Zip" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToZip}" Placeholder="enter to zip" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="7" Text="To State" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToState}" Placeholder="enter to state" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="8" Text="To City" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToCity}" Placeholder="enter to city" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="9" Text="To Street" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToStreet}" Placeholder="enter to street" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="10" Text="Amount" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Text="{Binding StickyDto.Amount}" Placeholder="enter amount" Style="{StaticResource entryStyle}"/>
-                <Label Grid.Column="0" Grid.Row="11" Text="Shipping" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Text="{Binding StickyDto.Shipping}" Placeholder="enter shipping" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ShippingEntryColor}"/>
-                <Label Grid.Column="0" Grid.Row="12" Text="Line Items" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="12" IsEnabled="False" Text="{Binding LineItemsDescription}" Style="{StaticResource entryStyle}"/>
-                <Button Grid.Column="2" Grid.Row="12" Text="View" Style="{StaticResource buttonStyle}" Command="{Binding ViewLineItemsCommand}"/>
-                <Label Grid.Column="0" Grid.Row="13" Text="Nexus Addresses" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="13" IsEnabled="False" Text="{Binding LineItemsDescription}" Style="{StaticResource entryStyle}"/>
-                <Button Grid.Column="2" Grid.Row="13" Text="View" Style="{StaticResource buttonStyle}" Command="{Binding ViewNexusAddressesCommand}"/>
-                <Button Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="3" Text="Get Tax For Order" Style="{StaticResource buttonStyle}" Command="{Binding GetTaxCommand}"/>
-            </Grid>
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" Margin="0">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1.0*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Text="From Country" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromCountry}" Placeholder="enter from country" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="1" Text="From Zip" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromZip}" Placeholder="enter from zip" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="2" Text="From State" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromState}" Placeholder="enter from state" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="3" Text="From City" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromCity}" Placeholder="enter from city" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="4" Text="From Street" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding StickyDto.FromStreet}" Placeholder="enter from street" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="5" Text="To Country" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToCountry}" Placeholder="enter to country" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
+                    <Label Grid.Column="0" Grid.Row="6" Text="To Zip" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToZip}" Placeholder="enter to zip" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="7" Text="To State" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToState}" Placeholder="enter to state" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="8" Text="To City" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToCity}" Placeholder="enter to city" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="9" Text="To Street" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2" Text="{Binding StickyDto.ToStreet}" Placeholder="enter to street" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="10" Text="Amount" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Text="{Binding StickyDto.Amount}" Placeholder="enter amount" Style="{StaticResource entryStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="11" Text="Shipping" Style="{StaticResource labelStyle}"/>
+                    <Entry Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Text="{Binding StickyDto.Shipping}" Placeholder="enter shipping" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ShippingEntryColor}"/>
+                    <Label Grid.Column="0" Grid.Row="12" Text="Line Items" Style="{StaticResource labelStyle}"/>
+                    <Label Grid.Column="1" Grid.Row="12" Text="{Binding LineItemsDescription}" Style="{StaticResource labelStyleGray}"/>
+                    <Button Grid.Column="2" Grid.Row="12" Text="View" Style="{StaticResource buttonStyle}" Command="{Binding ViewLineItemsCommand}"/>
+                    <Label Grid.Column="0" Grid.Row="13" Text="Nexus Addresses" Style="{StaticResource labelStyle}"/>
+                    <Label Grid.Column="1" Grid.Row="13" Text="{Binding AddressesDescription}" Style="{StaticResource labelStyleGray}"/>
+                    <Button Grid.Column="2" Grid.Row="13" Text="View" Style="{StaticResource buttonStyle}" Command="{Binding ViewNexusAddressesCommand}"/>
+                    <Button Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="3" Text="Get Tax For Order" Style="{StaticResource buttonStyle}" Command="{Binding GetTaxCommand}"/>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

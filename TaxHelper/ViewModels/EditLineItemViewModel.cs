@@ -8,19 +8,23 @@ namespace TaxHelper.ViewModels
 {
     public class EditLineItemViewModel : BaseViewModel
     {
-        public OrderLineItem LineItem { get; set; }
+        public OrderLineItem LineItem { get; private set; }
 
-        public ICommand SubmitCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
-        public ICommand DeleteCommand { get; set; }
+        public ICommand SubmitCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
 
-        public Action<OrderLineItem> HandleSubmit;
-        public Action<OrderLineItem> HandleDelete;
+        private Action<OrderLineItem> HandleSubmit;
+        private Action<OrderLineItem> HandleDelete;
 
-        public EditLineItemViewModel(INavigation navigation, OrderLineItem lineItem)
-            : base(navigation)
+        public bool IsDeleteButtonVisible => null != HandleDelete;
+
+        public EditLineItemViewModel(INavigation navigation, Action<string> handleError, OrderLineItem lineItem, Action<OrderLineItem> handleSubmit, Action<OrderLineItem> handleDelete)
+            : base(navigation, handleError)
         {
             LineItem = (lineItem != null) ? lineItem : new OrderLineItem();
+            HandleSubmit = handleSubmit;
+            HandleDelete = handleDelete;
             SubmitCommand = new Command(Submit);
             CancelCommand = new Command(Cancel);
             DeleteCommand = new Command(Delete);
