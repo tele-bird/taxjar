@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using TaxHelper.Models;
@@ -53,6 +52,12 @@ namespace TaxHelper.ViewModels
             await Navigation.PushModalAsync(viewLineItems);
         }
 
+        //private async void ViewAddresses()
+        //{
+        //    var viewAddresses = new ViewAddresses(null, OnAddressesUpdated, StickyDto.Addresses.ToArray<NexusAddress>());
+        //    await Navigation.PushModalAsync(viewAddresses);
+        //}
+
         private void ViewNexusAddresses()
         {
             HandleError("View addresses is not plugged in yet.");
@@ -61,19 +66,33 @@ namespace TaxHelper.ViewModels
         private void OnLineItemsUpdated(OrderLineItem[] updatedLineItems)
         {
             StickyDto.LineItems = updatedLineItems;
-            //OnPropertyChanged(nameof(StickyDto));
-            UpdateLineItemsDescription();
+            UpdateOrderWithLineItems();
         }
 
-        private void UpdateLineItemsDescription()
+        private void OnAddressesUpdated(NexusAddress[] updatedAddresses)
         {
-            LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.TotalCost:C}";
+            StickyDto.Addresses = updatedAddresses;
+            UpdateOrderWithAddresses();
+        }
+
+        private void UpdateOrderWithLineItems()
+        {
+            LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.GrandTotalFloat:C}";
+            StickyDto.Amount = StickyDto.LineItemsTotalFloat;
+            OnPropertyChanged(nameof(StickyDto));
+        }
+
+        private void UpdateOrderWithAddresses()
+        {
+            AddressesDescription = $"{StickyDto.Addresses.Length} addresses";
+            OnPropertyChanged(nameof(StickyDto));
         }
 
         protected override void OnAppearingFirstTime(object obj)
         {
             base.OnAppearingFirstTime(obj); // StickyDto is set in the base class implementation
-            UpdateLineItemsDescription();
+            UpdateOrderWithLineItems();
+            UpdateOrderWithAddresses();
         }
 
         private async void GetTax()

@@ -54,18 +54,24 @@ namespace TaxHelper.Models
         public OrderLineItem[] LineItems { get; set; }
 
         [JsonIgnore]
-        public float TotalCost
+        public float ShippingFloat => Shipping.HasValue ? Shipping.Value : 0f;
+
+        [JsonIgnore]
+        public float LineItemsTotalFloat
         {
             get
             {
-                float? total = 0;
+                float total = 0;
                 foreach (var lineItem in LineItems)
                 {
-                    total += lineItem.Quantity * lineItem.UnitPrice - lineItem.Discount;
+                    total += lineItem.TotalFloat;
                 }
-                return total.Value;
+                return total;
             }
         }
+
+        [JsonIgnore]
+        public float GrandTotalFloat => LineItemsTotalFloat + ShippingFloat;
 
         public Order()
         {
@@ -106,6 +112,10 @@ namespace TaxHelper.Models
                         errors.Add(lineItemError);
                     }
                 }
+            }
+            if(Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat))
+            {
+                errors.Add("Order: Amount doesn't match the total of the line items");
             }
             return errors;
         }
