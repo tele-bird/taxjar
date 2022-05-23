@@ -1,15 +1,19 @@
-﻿using TaxHelper.ViewModels;
+﻿using Autofac;
+using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
 namespace TaxHelper
 {
     public partial class TaxCalculator : ContentPage
     {
+        // todo: force Shell to use Container.Resolve() instead of using the empty constructor
+        //public TaxCalculator(TaxCalculatorViewModel taxCalculatorViewModel)
         public TaxCalculator()
         {
             InitializeComponent();
-            var viewModel = new TaxCalculatorViewModel(Navigation, ShowAlert);
-            BindingContext = viewModel;
+            var taxCalculatorViewModel = App.Container.Resolve<TaxCalculatorViewModel>();
+            taxCalculatorViewModel.HandleError = ShowAlert;
+            BindingContext = taxCalculatorViewModel;
         }
 
         private async void ShowAlert(string message)

@@ -6,11 +6,12 @@ namespace TaxHelper
 {
     public partial class TaxResults : ContentPage
     {
-        public TaxResults()
+        public TaxResultsViewModel ViewModel => (TaxResultsViewModel)BindingContext;
+
+        public TaxResults(TaxResultsViewModel taxResultsViewModel)
         {
             InitializeComponent();
-            var viewModel = new TaxResultsViewModel(Navigation, null);
-            BindingContext = viewModel;
+            BindingContext = taxResultsViewModel;
         }
     }
 }

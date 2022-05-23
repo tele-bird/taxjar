@@ -7,30 +7,25 @@ namespace TaxHelper.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
-        private AppSettingsDto mSettings;
-
         public string TaxJarApiKey
         {
             get
             {
-                return mSettings?.TaxJarApiKey;
+                return mAppSettingsService.Settings.TaxJarApiKey;
             }
             set
             {
-                if(mSettings == null)
-                {
-                    mSettings = new AppSettingsDto();
-                }
-                mSettings.TaxJarApiKey = value;
-                SettingsService<AppSettingsDto>.Instance.Settings = mSettings;
+                mAppSettingsService.Settings.TaxJarApiKey = value;
                 OnPropertyChanged();
             }
         }
 
-        public SettingsViewModel(INavigation navigation, Action<string> handleError)
-            : base(navigation, handleError)
+        private IAppSettingsService mAppSettingsService;
+
+        public SettingsViewModel(INavigationProvider navigationProvider, IAppSettingsService appSettingsService)
+            : base(navigationProvider)
         {
-            mSettings = SettingsService<AppSettingsDto>.Instance.Settings;
+            mAppSettingsService = appSettingsService;
         }
     }
 }

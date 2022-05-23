@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Autofac;
+using System;
 //using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
+using TaxHelper.Services;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
@@ -17,7 +19,7 @@ namespace TaxHelper.ViewModels
         public ICommand LineItemSelectedCommand { get; private set; }
         public ICommand DoneCommand { get; private set; }
 
-        private Action<OrderLineItem[]> mHandleDone;
+        public Action<OrderLineItem[]> HandleDone { get; set; }
 
         private string mTitle;
         public string Title
@@ -41,26 +43,22 @@ namespace TaxHelper.ViewModels
             }
         }
 
-        private async Task RefreshLineItemsAsync(params OrderLineItem[] lineItems)
+        public void SetLineItems(params OrderLineItem[] lineItems)
         {
-            IsRefreshing = true;
-            await Task.Delay(1000);
             LineItems.Clear();
             foreach(var lineItem in lineItems)
             {
                 LineItems.Add(lineItem);
             }
             Title = $"{LineItems.Count} Line Items";
-            IsRefreshing = false;
         }
 
         public ICommand AddCommand { get; set; }
 
-        public ViewLineItemsViewModel(INavigation navigation, Action<string> handleError, Action<OrderLineItem[]> handleDone, params OrderLineItem[] lineItems)
-            : base(navigation, handleError)
+        public ViewLineItemsViewModel(INavigationProvider navigationProvider, params OrderLineItem[] lineItems)
+            : base(navigationProvider)
         {
             LineItemSelectedCommand = new Command<OrderLineItem>(Edit);
-            mHandleDone = handleDone;
             DoneCommand = new Command(Done);
             AddCommand = new Command(Add);
             LineItems.Clear();
@@ -73,22 +71,26 @@ namespace TaxHelper.ViewModels
 
         private async void Done(object obj)
         {
-            await Navigation.PopModalAsync();
-            mHandleDone.Invoke(LineItems.ToArray<OrderLineItem>());
+            await NavigationProvider.Navigation.PopModalAsync();
+            HandleDone.Invoke(LineItems.ToArray<OrderLineItem>());
         }
 
         private async void Add(object obj)
         {
-            var editLineItem = new EditLineItem(OnAdded);
-            await Navigation.PushModalAsync(editLineItem);
+            var editLineItem = App.Container.Resolve<EditLineItem>();
+            editLineItem.ViewModel.HandleSubmit += OnAdded;
+            await NavigationProvider.Navigation.PushModalAsync(editLineItem);
         }
 
         private async void Edit(OrderLineItem lineItem)
         {
             if(null != lineItem)
             {
-                var editLineItem = new EditLineItem(lineItem, OnEdited, OnDeleted);
-                await Navigation.PushModalAsync(editLineItem);
+                var editLineItem = App.Container.Resolve<EditLineItem>();
+                editLineItem.ViewModel.HandleSubmit += OnEdited;
+                editLineItem.ViewModel.HandleDelete += OnDeleted;
+                editLineItem.ViewModel.LineItem = lineItem;
+                await NavigationProvider.Navigation.PushModalAsync(editLineItem);
             }
         }
 

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace TaxHelper.Models
+namespace TaxHelper.Common.Models
 {
     public class TaxLocation : IBaseModel
     {

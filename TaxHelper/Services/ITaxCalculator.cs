@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
 
 namespace TaxHelper.Services
 {

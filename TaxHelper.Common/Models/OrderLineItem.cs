@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace TaxHelper.Models
+namespace TaxHelper.Common.Models
 {
     public class OrderLineItem : IBaseModel
     {
@@ -53,7 +53,7 @@ namespace TaxHelper.Models
 
         public void Update(OrderLineItem editedLineItem)
         {
-            if(!Id.Equals(editedLineItem.Id))
+            if (!Id.Equals(editedLineItem.Id))
             {
                 throw new Exception("Id mismatch detected");
             }

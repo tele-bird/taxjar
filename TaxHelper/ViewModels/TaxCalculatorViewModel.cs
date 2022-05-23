@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Linq;
 using System.Windows.Input;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
 using TaxHelper.Services;
 using Xamarin.Forms;
 
@@ -37,26 +38,24 @@ namespace TaxHelper.ViewModels
 
         public ICommand GetTaxCommand { get; set; }
 
-        public TaxCalculatorViewModel(INavigation navigation, Action<string> handleError)
-            : base(navigation, handleError)
+        private ITaxService mTaxService { get; }
+
+        public TaxCalculatorViewModel(INavigationProvider navigationProvider, IOrderSettingsService orderSettingsService, ITaxService taxService)
+            : base(navigationProvider, orderSettingsService)
         {
-            Navigation = navigation;
             ViewLineItemsCommand = new Command(ViewLineItems);
             ViewNexusAddressesCommand = new Command(ViewNexusAddresses);
             GetTaxCommand = new Command(GetTax);
+            mTaxService = taxService;
         }
 
         private async void ViewLineItems()
         {
-            var viewLineItems = new ViewLineItems(null, OnLineItemsUpdated, StickyDto.LineItems.ToArray<OrderLineItem>());
-            await Navigation.PushModalAsync(viewLineItems);
+            var viewLineItems = App.Container.Resolve<ViewLineItems>();
+            viewLineItems.ViewModel.SetLineItems(StickyDto.LineItems.ToArray());
+            viewLineItems.ViewModel.HandleDone += OnLineItemsUpdated;
+            await NavigationProvider.Navigation.PushModalAsync(viewLineItems);
         }
-
-        //private async void ViewAddresses()
-        //{
-        //    var viewAddresses = new ViewAddresses(null, OnAddressesUpdated, StickyDto.Addresses.ToArray<NexusAddress>());
-        //    await Navigation.PushModalAsync(viewAddresses);
-        //}
 
         private void ViewNexusAddresses()
         {
@@ -78,7 +77,7 @@ namespace TaxHelper.ViewModels
         private void UpdateOrderWithLineItems()
         {
             LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.GrandTotalFloat:C}";
-            StickyDto.Amount = StickyDto.LineItemsTotalFloat;
+            //StickyDto.Amount = StickyDto.LineItemsTotalFloat;
             OnPropertyChanged(nameof(StickyDto));
         }
 
@@ -108,14 +107,13 @@ namespace TaxHelper.ViewModels
                 }
 
                 // calculate the tax:
-                var result = await TaxService.Instance.GetTaxesForOrder(StickyDto);
+                var result = await mTaxService.GetTaxesForOrder(StickyDto);
 
                 // navigate to results page:
-                var taxResults = new TaxResults();
-                var taxResultsViewModel = (TaxResultsViewModel)taxResults.BindingContext;
-                taxResultsViewModel.Result = result;
-                taxResultsViewModel.Title = "Tax Calculation";
-                await Navigation.PushAsync(taxResults);
+                var taxResults = App.Container.Resolve<TaxResults>();
+                taxResults.ViewModel.Result = result;
+                taxResults.ViewModel.Title = "Tax Calculation";
+                await NavigationProvider.Navigation.PushAsync(taxResults);
             }
             catch (Exception exc)
             {

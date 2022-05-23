@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace TaxHelper.Models
+namespace TaxHelper.Common.Models
 {
     public class Order : IBaseModel
     {
-        [JsonProperty(PropertyName ="from_country")]
+        [JsonProperty(PropertyName = "from_country")]
         public string FromCountry { get; set; }
 
         [JsonProperty(PropertyName = "from_zip")]
@@ -47,11 +48,14 @@ namespace TaxHelper.Models
         [JsonProperty(PropertyName = "exemption_type")]
         public string ExemptionType { get; set; }
 
-        [JsonProperty(PropertyName ="nexus_addresses")]
+        [JsonProperty(PropertyName = "nexus_addresses")]
         public NexusAddress[] Addresses { get; set; }
 
-        [JsonProperty(PropertyName ="line_items")]
+        [JsonProperty(PropertyName = "line_items")]
         public OrderLineItem[] LineItems { get; set; }
+
+        [JsonIgnore]
+        public float AmountFloat => Amount.HasValue ? Amount.Value : 0f;
 
         [JsonIgnore]
         public float ShippingFloat => Shipping.HasValue ? Shipping.Value : 0f;
@@ -90,30 +94,30 @@ namespace TaxHelper.Models
             {
                 errors.Add("Order: Shipping is required");
             }
-            if(!Amount.HasValue && ((null == LineItems) || LineItems.Length < 1))
+            if (!Amount.HasValue && ((null == LineItems) || LineItems.Length < 1))
             {
                 errors.Add("Order: Either Amount or Line Items are required");
             }
-            if(!string.IsNullOrEmpty(ToCountry) && ToCountry.ToLower().Equals("us") && string.IsNullOrEmpty(ToZip))
+            if (!string.IsNullOrEmpty(ToCountry) && ToCountry.ToLower().Equals("us") && string.IsNullOrEmpty(ToZip))
             {
                 errors.Add("Order: To Zip is required when To Country is US");
             }
-            if(!string.IsNullOrEmpty(ToCountry) && (ToCountry.ToLower().Equals("us") || ToCountry.ToLower().Equals("ca")) && string.IsNullOrEmpty(ToState))
+            if (!string.IsNullOrEmpty(ToCountry) && (ToCountry.ToLower().Equals("us") || ToCountry.ToLower().Equals("ca")) && string.IsNullOrEmpty(ToState))
             {
                 errors.Add("Order: To State is required when To Country is US or CA");
             }
-            if(null != LineItems)
+            if (null != LineItems)
             {
-                foreach(var lineItem in LineItems)
+                foreach (var lineItem in LineItems)
                 {
                     var lineItemErrors = lineItem.GetErrors();
-                    foreach(var lineItemError in lineItemErrors)
+                    foreach (var lineItemError in lineItemErrors)
                     {
                         errors.Add(lineItemError);
                     }
                 }
             }
-            if(Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat))
+            if (Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat))
             {
                 errors.Add("Order: Amount doesn't match the total of the line items");
             }

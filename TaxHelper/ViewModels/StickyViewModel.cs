@@ -37,18 +37,20 @@ namespace TaxHelper.ViewModels
         public ICommand AppearingCommand { get; set; }
 
         public ICommand DisappearingCommand { get; set; }
+        private ISettingsService<T> mSettingsService;
 
-        protected StickyViewModel(INavigation navigation, Action<string> handleError)
-            : base(navigation, handleError)
+        protected StickyViewModel(INavigationProvider navigationProvider, ISettingsService<T> settingsService)
+            : base(navigationProvider)
         {
             mAppeared = false;
             AppearingCommand = new Command(OnAppearing);
             DisappearingCommand = new Command(OnDisppearing);
+            mSettingsService = settingsService;
         }
 
         protected virtual void OnDisppearing(object obj)
         {
-            SettingsService<T>.Instance.Settings = StickyDto;
+            mSettingsService.Settings = StickyDto;
         }
 
         protected virtual void OnAppearing(object obj)
@@ -62,7 +64,7 @@ namespace TaxHelper.ViewModels
 
         protected virtual void OnAppearingFirstTime(object obj)
         {
-            StickyDto = SettingsService<T>.Instance.Settings;
+            StickyDto = mSettingsService.Settings;
         }
     }
 }

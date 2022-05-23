@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
 using TaxHelper.Services;
 using Xamarin.Forms;
 
@@ -8,37 +8,54 @@ namespace TaxHelper.ViewModels
 {
     public class EditLineItemViewModel : BaseViewModel
     {
-        public OrderLineItem LineItem { get; private set; }
+        private OrderLineItem mLineItem;
+        public OrderLineItem LineItem
+        {
+            get { return mLineItem; }
+            set
+            {
+                mLineItem = value;
+                OnPropertyChanged();
+                IsDeleteButtonVisible = (value != null) && (HandleDelete != null);
+            }
+        }
+
+        private bool mIsDeleteButtonVisible;
+        public bool IsDeleteButtonVisible
+        {
+            get { return mIsDeleteButtonVisible; }
+            set
+            {
+                mIsDeleteButtonVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand SubmitCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        private Action<OrderLineItem> HandleSubmit;
-        private Action<OrderLineItem> HandleDelete;
+        public Action<OrderLineItem> HandleSubmit { get; set; }
+        public Action<OrderLineItem> HandleDelete { get; set; }
 
-        public bool IsDeleteButtonVisible => null != HandleDelete;
-
-        public EditLineItemViewModel(INavigation navigation, Action<string> handleError, OrderLineItem lineItem, Action<OrderLineItem> handleSubmit, Action<OrderLineItem> handleDelete)
-            : base(navigation, handleError)
+        public EditLineItemViewModel(INavigationProvider navigationProvider)
+            : base(navigationProvider)
         {
-            LineItem = (lineItem != null) ? lineItem : new OrderLineItem();
-            HandleSubmit = handleSubmit;
-            HandleDelete = handleDelete;
             SubmitCommand = new Command(Submit);
             CancelCommand = new Command(Cancel);
             DeleteCommand = new Command(Delete);
+            LineItem = new OrderLineItem();
         }
 
         private async void Delete(object obj)
         {
-            await Navigation.PopModalAsync();
+            await NavigationProvider.Navigation.PopModalAsync();
             HandleDelete(LineItem);
         }
 
         private async void Cancel(object obj)
         {
-            await Navigation.PopModalAsync();
+            await NavigationProvider.Navigation.PopModalAsync();
         }
 
         private async void Submit()
@@ -47,7 +64,7 @@ namespace TaxHelper.ViewModels
             try
             {
                 ThrowIfInvalidValues();
-                await Navigation.PopModalAsync();
+                await NavigationProvider.Navigation.PopModalAsync();
                 HandleSubmit(LineItem);
             }
             catch (Exception exc)

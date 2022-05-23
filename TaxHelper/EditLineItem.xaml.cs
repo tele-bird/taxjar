@@ -1,5 +1,5 @@
 ﻿using System;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
 using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
@@ -7,16 +7,13 @@ namespace TaxHelper
 {
     public partial class EditLineItem : ContentPage
     {
-        public EditLineItem(OrderLineItem lineItem, Action<OrderLineItem> handleSubmit, Action<OrderLineItem> handleDelete)
+        public EditLineItemViewModel ViewModel => (EditLineItemViewModel)BindingContext;
+
+        public EditLineItem(EditLineItemViewModel editLineItemViewModel)
         {
             InitializeComponent();
-            var viewModel = new EditLineItemViewModel(Navigation, ShowAlert, lineItem, handleSubmit, handleDelete);
-            BindingContext = viewModel;
-        }
-
-        public EditLineItem(Action<OrderLineItem> handleSubmit)
-            : this(null, handleSubmit, null)
-        {
+            editLineItemViewModel.HandleError += ShowAlert;
+            BindingContext = editLineItemViewModel;
         }
 
         private async void ShowAlert(string message)

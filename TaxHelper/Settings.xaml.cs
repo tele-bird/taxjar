@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
@@ -6,10 +7,12 @@ namespace TaxHelper
 {
     public partial class Settings : ContentPage
     {
+        // todo: force Shell to use Container.Resolve() instead of using the empty constructor
+        //public Settings(SettingsViewModel settingsViewModel)
         public Settings()
         {
             InitializeComponent();
-            BindingContext = new SettingsViewModel(Navigation, null);
+            BindingContext = App.Container.Resolve<SettingsViewModel>();
         }
     }
 }

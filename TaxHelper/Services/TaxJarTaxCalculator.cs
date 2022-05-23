@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using TaxHelper.Dto;
-using TaxHelper.Models;
+using TaxHelper.Common.Models;
 
 namespace TaxHelper.Services
 {
@@ -15,20 +15,16 @@ namespace TaxHelper.Services
         private static string GET_TAX_RATES_FOR_LOCATION_URL = "https://api.taxjar.com/v2/rates/";
         private static string GET_TAXES_FOR_ORDER = "https://api.taxjar.com/v2/taxes";
 
-        private readonly string mTaxJarApiKey;
+        private readonly IAppSettingsService mAppSettingsService;
 
-        public TaxJarTaxCalculator(string taxJarApiKey)
+        public TaxJarTaxCalculator(IAppSettingsService appSettingsService)
         {
-            if (taxJarApiKey == null)
-            {
-                throw new Exception("API key is required");
-            }
-            mTaxJarApiKey = taxJarApiKey;
+            this.mAppSettingsService = appSettingsService;
         }
 
         private AuthenticationHeaderValue ConstructAuthorizationHeader()
         {
-            return new AuthenticationHeaderValue("Bearer", mTaxJarApiKey);
+            return new AuthenticationHeaderValue("Bearer", mAppSettingsService.Settings.TaxJarApiKey);
         }
 
         private async Task<Exception> ConstructTaxJarException(HttpResponseMessage response)

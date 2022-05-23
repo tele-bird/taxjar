@@ -2,20 +2,20 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using TaxHelper.Services;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        protected INavigation Navigation { get; set; }
+        protected INavigationProvider NavigationProvider { get; set; }
 
-        protected Action<string> HandleError { get; private set; }
+        public Action<string> HandleError { get; set; }
 
-        protected BaseViewModel(INavigation navigation, Action<string> handleError)
+        protected BaseViewModel(INavigationProvider navigationProvider)
         {
-            Navigation = navigation;
-            HandleError = handleError;
+            NavigationProvider = navigationProvider;
         }
 
         #region INotifyPropertyChanged
