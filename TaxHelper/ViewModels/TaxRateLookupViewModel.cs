@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using System;
 using System.Windows.Input;
+using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
 using Xamarin.Forms;
@@ -25,11 +26,7 @@ namespace TaxHelper.ViewModels
             try
             {
                 // let the TaxLocation tell us whether it is valid:
-                var orderErrors = StickyDto.GetErrors();
-                if (orderErrors.Count > 0)
-                {
-                    throw new MultipleErrorsException(orderErrors);
-                }
+                StickyDto.ThrowIfInvalid();
 
                 // look up the tax rate:
                 var result = await mTaxService.GetTaxRatesForLocation(StickyDto);

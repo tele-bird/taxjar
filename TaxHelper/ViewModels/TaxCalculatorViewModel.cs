@@ -100,11 +100,7 @@ namespace TaxHelper.ViewModels
             try
             {
                 // let the Order tell us whether it is valid:
-                var orderErrors = StickyDto.GetErrors();
-                if(orderErrors.Count > 0)
-                {
-                    throw new MultipleErrorsException(orderErrors);
-                }
+                StickyDto.ThrowIfInvalid();
 
                 // calculate the tax:
                 var result = await mTaxService.GetTaxesForOrder(StickyDto);

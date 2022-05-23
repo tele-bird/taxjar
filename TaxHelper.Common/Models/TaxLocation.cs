@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TaxHelper.Common.Models
 {
-    public class TaxLocation : IBaseModel
+    public class TaxLocation : ValidatableModel
     {
         public string Country { get; set; }
         public string Zip { get; set; }
@@ -12,7 +12,7 @@ namespace TaxHelper.Common.Models
         public string City { get; set; }
         public string Street { get; set; }
 
-        public IList<string> GetErrors()
+        internal override IList<string> GetValidationErrors()
         {
             IList<string> errors = new List<string>();
             if (string.IsNullOrEmpty(this.Zip))

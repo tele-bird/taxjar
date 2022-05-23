@@ -1,10 +1,11 @@
 ﻿using System;
+using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using Xunit;
 
 namespace TaxHelper.Tests.Xunit.Models.TestData
 {
-    public class InvalidOrderTestDataMissingAmountOrLineItems : TheoryData<Order, float, float, int>
+    public class InvalidOrderTestDataMissingAmountOrLineItems : TheoryData<Order, float, float, Exception>
     {
         private Order mOrder = new Order
         {
@@ -38,14 +39,20 @@ namespace TaxHelper.Tests.Xunit.Models.TestData
         };
         private float mExpectedLineItemsTotal = 0f;
         private float mExpectedGrandTotal = 1.5f;
-        private int mExpectedErrors = 1;
+        private Exception mExpectedException = new ModelValidationException
+        (
+            new[]
+            {
+                ModelValidationErrors.ORDER_AMOUNT_OR_LINE_ITEMS_REQUIRED
+            }
+        );
 
         public InvalidOrderTestDataMissingAmountOrLineItems()
         {
             Add(mOrder,
                 mExpectedLineItemsTotal,
                 mExpectedGrandTotal,
-                mExpectedErrors);
+                mExpectedException);
         }
     }
 }

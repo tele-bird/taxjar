@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace TaxHelper.Common.Models
 {
-    public class Order : IBaseModel
+    public class Order : ValidatableModel
     {
         [JsonProperty(PropertyName = "from_country")]
         public string FromCountry { get; set; }
@@ -83,34 +83,34 @@ namespace TaxHelper.Common.Models
             LineItems = new OrderLineItem[0];
         }
 
-        public IList<string> GetErrors()
+        internal override IList<string> GetValidationErrors()
         {
             IList<string> errors = new List<string>();
             if (string.IsNullOrEmpty(ToCountry))
             {
-                errors.Add("Order: To Country is required");
+                errors.Add(ModelValidationErrors.ORDER_TOCOUNTRY_REQUIRED);
             }
             if (!Shipping.HasValue)
             {
-                errors.Add("Order: Shipping is required");
+                errors.Add(ModelValidationErrors.ORDER_SHIPPING_REQUIRED);
             }
             if (!Amount.HasValue && ((null == LineItems) || LineItems.Length < 1))
             {
-                errors.Add("Order: Either Amount or Line Items are required");
+                errors.Add(ModelValidationErrors.ORDER_AMOUNT_OR_LINE_ITEMS_REQUIRED);
             }
             if (!string.IsNullOrEmpty(ToCountry) && ToCountry.ToLower().Equals("us") && string.IsNullOrEmpty(ToZip))
             {
-                errors.Add("Order: To Zip is required when To Country is US");
+                errors.Add(ModelValidationErrors.ORDER_TOZIP_REQUIRED_FOR_US);
             }
             if (!string.IsNullOrEmpty(ToCountry) && (ToCountry.ToLower().Equals("us") || ToCountry.ToLower().Equals("ca")) && string.IsNullOrEmpty(ToState))
             {
-                errors.Add("Order: To State is required when To Country is US or CA");
+                errors.Add(ModelValidationErrors.ORDER_TOSTATE_REQUIRED_FOR_US_AND_CA);
             }
             if (null != LineItems)
             {
                 foreach (var lineItem in LineItems)
                 {
-                    var lineItemErrors = lineItem.GetErrors();
+                    var lineItemErrors = lineItem.GetValidationErrors();
                     foreach (var lineItemError in lineItemErrors)
                     {
                         errors.Add(lineItemError);
@@ -119,7 +119,7 @@ namespace TaxHelper.Common.Models
             }
             if (Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat))
             {
-                errors.Add("Order: Amount doesn't match the total of the line items");
+                errors.Add(ModelValidationErrors.ORDER_AMOUNT_MISMATCH);
             }
             return errors;
         }

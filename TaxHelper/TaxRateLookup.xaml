@@ -14,6 +14,7 @@
                 <Setter Property="BackgroundColor" Value="Gray"/>
                 <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
                 <Setter Property="PlaceholderColor" Value="LightGray"/>
+                <Setter Property="Placeholder" Value="(empty)"/>
             </Style>
             <Style x:Key="editorStyle" TargetType="Editor">
                 <Setter Property="TextColor" Value="White"/>
@@ -42,15 +43,15 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0" Grid.Row="0" Text="Country" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding StickyDto.Country}" Placeholder="enter country" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding StickyDto.Country}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="1" Text="Zip" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding StickyDto.Zip}" Placeholder="enter zip" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding StickyDto.Zip}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="2" Text="State" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding StickyDto.State}" Placeholder="enter state" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding StickyDto.State}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="3" Text="City" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding StickyDto.City}" Placeholder="enter city" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding StickyDto.City}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="4" Text="Street" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding StickyDto.Street}" Placeholder="enter street" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding StickyDto.Street}" Style="{StaticResource entryStyle}"/>
                 <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Get Tax Rates" Command="{Binding GetTaxRatesCommand}" TextColor="White" BackgroundColor="#2196F3"/>
             </Grid>
         </StackLayout>

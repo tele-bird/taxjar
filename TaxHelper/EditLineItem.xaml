@@ -14,6 +14,7 @@
                 <Setter Property="BackgroundColor" Value="Gray"/>
                 <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
                 <Setter Property="PlaceholderColor" Value="LightGray"/>
+                <Setter Property="Placeholder" Value="(empty)"/>
             </Style>
             <Style x:Key="buttonStyle" TargetType="Button">
                 <Setter Property="Padding" Value="10"/>
@@ -45,15 +46,15 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0" Grid.Row="0" Text="Id" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding LineItem.Id}" Placeholder="enter id" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding LineItem.Id}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="1" Text="Quantity" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding LineItem.Quantity}" Placeholder="enter quantity" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="1" Text="{Binding LineItem.Quantity}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="2" Text="Product Tax Code" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding LineItem.ProductTaxCode}" Placeholder="enter product tax code" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding LineItem.ProductTaxCode}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="3" Text="Unit Price" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding LineItem.UnitPrice}" Placeholder="enter unit price" Style="{StaticResource entryStyle}" PlaceholderColor="{Binding ToCountryEntryColor}"/>
+                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding LineItem.UnitPrice}" Style="{StaticResource entryStyle}"/>
                 <Label Grid.Column="0" Grid.Row="4" Text="Discount" Style="{StaticResource labelStyle}"/>
-                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding LineItem.Discount}" Placeholder="enter discount" Style="{StaticResource entryStyle}"/>
+                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding LineItem.Discount}" Style="{StaticResource entryStyle}"/>
                 <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="Submit" Command="{Binding SubmitCommand}" Style="{StaticResource buttonStyle}"/>
                 <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource buttonStyle}"/>
                 <Button Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding IsDeleteButtonVisible}" Style="{StaticResource buttonStyleDelete}"/>

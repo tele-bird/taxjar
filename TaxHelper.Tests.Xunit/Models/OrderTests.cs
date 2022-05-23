@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using TaxHelper.Tests.Xunit.Models.TestData;
 using Xunit;
@@ -16,14 +17,20 @@ namespace TaxHelper.Tests.Xunit.Models
             Order order,
             float expectedLineItemsTotal,
             float expectedGrandTotal,
-            int expectedErrors)
+            Exception expectedException)
         {
-            // test calculated values:
-            Assert.Equal(expectedLineItemsTotal, order.LineItemsTotalFloat);
-            Assert.Equal(expectedGrandTotal, order.GrandTotalFloat);
+            // arrange
+            // nothing to do here - ClassData arranges the state
 
-            // test validation:
-            Assert.Equal(expectedErrors, order.GetErrors().Count);
+            // act
+            var actualLineItemsTotal = order.LineItemsTotalFloat;
+            var actualGrandTotalFloat = order.GrandTotalFloat;
+            var actualException = Record.Exception(order.ThrowIfInvalid);
+
+            // assert
+            Assert.Equal(expectedLineItemsTotal, actualLineItemsTotal);
+            Assert.Equal(expectedGrandTotal, actualGrandTotalFloat);
+            Assert.Equal(expectedException, actualException);
         }
     }
 }

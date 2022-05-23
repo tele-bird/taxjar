@@ -3,7 +3,7 @@ using TaxHelper.Common.Models;
 using Xunit;
 namespace TaxHelper.Tests.Xunit.Models.TestData
 {
-    public class ValidOrderTestData : TheoryData<Order, float, float, int>
+    public class ValidOrderTestData : TheoryData<Order, float, float, Exception>
     {
         private Order mOrder = new Order
         {
@@ -47,14 +47,14 @@ namespace TaxHelper.Tests.Xunit.Models.TestData
         };
         private float mExpectedLineItemsTotal = 15f;
         private float mExpectedGrandTotal = 16.5f;
-        private int mExpectedErrors = 0;
+        private Exception mExpectedException = null;
 
         public ValidOrderTestData()
         {
             Add(mOrder,
                 mExpectedLineItemsTotal,
                 mExpectedGrandTotal,
-                mExpectedErrors);
+                mExpectedException);
         }
     }
 }

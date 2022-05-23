@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
 using Xamarin.Forms;
@@ -63,11 +64,11 @@ namespace TaxHelper.ViewModels
             string errorMessage = null;
             try
             {
-                ThrowIfInvalidValues();
+                LineItem.ThrowIfInvalid();
                 await NavigationProvider.Navigation.PopModalAsync();
                 HandleSubmit(LineItem);
             }
-            catch (Exception exc)
+            catch (ModelValidationException exc)
             {
                 errorMessage = exc.Message;
             }
@@ -77,15 +78,6 @@ namespace TaxHelper.ViewModels
                 {
                     HandleError(errorMessage);
                 }
-            }
-        }
-
-        private void ThrowIfInvalidValues()
-        {
-            var errors = LineItem.GetErrors();
-            if (errors.Count > 0)
-            {
-                throw new MultipleErrorsException(errors);
             }
         }
     }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace TaxHelper.Common.Models
 {
-    public class OrderLineItem : IBaseModel
+    public class OrderLineItem : ValidatableModel
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
@@ -63,7 +63,7 @@ namespace TaxHelper.Common.Models
             Discount = editedLineItem.Discount;
         }
 
-        public IList<string> GetErrors()
+        internal override IList<string> GetValidationErrors()
         {
             IList<string> errors = new List<string>();
             if (string.IsNullOrEmpty(Id))
