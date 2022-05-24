@@ -11,11 +11,14 @@ namespace TaxHelper.ViewModels
         {
             get
             {
-                return mAppSettingsService.Settings.TaxJarApiKey;
+                var appSettingsDto = mAppSettingsService.Settings;
+                return appSettingsDto.TaxJarApiKey;
             }
             set
             {
-                mAppSettingsService.Settings.TaxJarApiKey = value;
+                var appSettingsDto = mAppSettingsService.Settings;
+                appSettingsDto.TaxJarApiKey = value;
+                mAppSettingsService.Settings = appSettingsDto;
                 OnPropertyChanged();
             }
         }

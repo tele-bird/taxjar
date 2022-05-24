@@ -117,7 +117,7 @@ namespace TaxHelper.Common.Models
                     }
                 }
             }
-            if (Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat))
+            if (Amount.HasValue && !Amount.Value.Equals(LineItemsTotalFloat) && LineItems.Length > 0)
             {
                 errors.Add(ModelValidationErrors.ORDER_AMOUNT_MISMATCH);
             }

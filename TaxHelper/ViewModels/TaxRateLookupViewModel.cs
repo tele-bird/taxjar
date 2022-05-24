@@ -20,7 +20,7 @@ namespace TaxHelper.ViewModels
             mTaxService = taxService;
         }
 
-        private async void LookupTaxRates()
+        public async void LookupTaxRates()
         {
             string errorMessage = null;
             try
@@ -32,10 +32,13 @@ namespace TaxHelper.ViewModels
                 var result = await mTaxService.GetTaxRatesForLocation(StickyDto);
 
                 // navigate to results page:
-                var taxResults = App.Container.Resolve<TaxResults>();
-                taxResults.ViewModel.Result = result;
-                taxResults.ViewModel.Title = "Tax Rates";
-                await NavigationProvider.Navigation.PushAsync(taxResults);
+                var taxResults = App.Container?.Resolve<TaxResults>();
+                if(taxResults != null)
+                {
+                    taxResults.ViewModel.Result = result;
+                    taxResults.ViewModel.Title = "Tax Rates";
+                    await NavigationProvider.Navigation?.PushAsync(taxResults);
+                }
             }
             catch (Exception exc)
             {

@@ -24,6 +24,11 @@ namespace TaxHelper.Services
 
         private AuthenticationHeaderValue ConstructAuthorizationHeader()
         {
+            var apiKey = mAppSettingsService.Settings.TaxJarApiKey;
+            if(apiKey == null)
+            {
+                throw new MissingApiKeyException();
+            }
             return new AuthenticationHeaderValue("Bearer", mAppSettingsService.Settings.TaxJarApiKey);
         }
 

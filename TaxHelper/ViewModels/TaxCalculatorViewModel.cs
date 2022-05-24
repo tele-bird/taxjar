@@ -51,10 +51,13 @@ namespace TaxHelper.ViewModels
 
         private async void ViewLineItems()
         {
-            var viewLineItems = App.Container.Resolve<ViewLineItems>();
-            viewLineItems.ViewModel.SetLineItems(StickyDto.LineItems.ToArray());
-            viewLineItems.ViewModel.HandleDone += OnLineItemsUpdated;
-            await NavigationProvider.Navigation.PushModalAsync(viewLineItems);
+            var viewLineItems = App.Container?.Resolve<ViewLineItems>();
+            if(viewLineItems != null)
+            {
+                viewLineItems.ViewModel.SetLineItems(StickyDto.LineItems.ToArray());
+                viewLineItems.ViewModel.HandleDone += OnLineItemsUpdated;
+                await NavigationProvider.Navigation?.PushModalAsync(viewLineItems);
+            }
         }
 
         private void ViewNexusAddresses()
@@ -76,8 +79,7 @@ namespace TaxHelper.ViewModels
 
         private void UpdateOrderWithLineItems()
         {
-            LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.GrandTotalFloat:C}";
-            //StickyDto.Amount = StickyDto.LineItemsTotalFloat;
+            LineItemsDescription = $"{StickyDto.LineItems.Length} totaling {StickyDto.LineItemsTotalFloat:C}";
             OnPropertyChanged(nameof(StickyDto));
         }
 
@@ -106,10 +108,13 @@ namespace TaxHelper.ViewModels
                 var result = await mTaxService.GetTaxesForOrder(StickyDto);
 
                 // navigate to results page:
-                var taxResults = App.Container.Resolve<TaxResults>();
-                taxResults.ViewModel.Result = result;
-                taxResults.ViewModel.Title = "Tax Calculation";
-                await NavigationProvider.Navigation.PushAsync(taxResults);
+                var taxResults = App.Container?.Resolve<TaxResults>();
+                if(taxResults != null)
+                {
+                    taxResults.ViewModel.Result = result;
+                    taxResults.ViewModel.Title = "Tax Calculation";
+                    await NavigationProvider.Navigation?.PushAsync(taxResults);
+                }
             }
             catch (Exception exc)
             {

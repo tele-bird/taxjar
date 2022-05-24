@@ -18,7 +18,8 @@ namespace TaxHelper.Services
             }
             set
             {
-                Preferences.Set(mKey, JsonConvert.SerializeObject(value));
+                var serializedSettings = JsonConvert.SerializeObject(value);
+                Preferences.Set(mKey, serializedSettings);
             }
         }
 

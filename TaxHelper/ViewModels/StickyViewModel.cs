@@ -46,6 +46,7 @@ namespace TaxHelper.ViewModels
             AppearingCommand = new Command(OnAppearing);
             DisappearingCommand = new Command(OnDisppearing);
             mSettingsService = settingsService;
+            StickyDto = mSettingsService.Settings;
         }
 
         protected virtual void OnDisppearing(object obj)
@@ -64,7 +65,6 @@ namespace TaxHelper.ViewModels
 
         protected virtual void OnAppearingFirstTime(object obj)
         {
-            StickyDto = mSettingsService.Settings;
         }
     }
 }

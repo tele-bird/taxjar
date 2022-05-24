@@ -11,9 +11,12 @@ namespace TaxHelper
         public TaxCalculator()
         {
             InitializeComponent();
-            var taxCalculatorViewModel = App.Container.Resolve<TaxCalculatorViewModel>();
-            taxCalculatorViewModel.HandleError = ShowAlert;
-            BindingContext = taxCalculatorViewModel;
+            var taxCalculatorViewModel = App.Container?.Resolve<TaxCalculatorViewModel>();
+            if(taxCalculatorViewModel != null)
+            {
+                taxCalculatorViewModel.HandleError = ShowAlert;
+                BindingContext = taxCalculatorViewModel;
+            }
         }
 
         private async void ShowAlert(string message)

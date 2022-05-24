@@ -77,20 +77,26 @@ namespace TaxHelper.ViewModels
 
         private async void Add(object obj)
         {
-            var editLineItem = App.Container.Resolve<EditLineItem>();
-            editLineItem.ViewModel.HandleSubmit += OnAdded;
-            await NavigationProvider.Navigation.PushModalAsync(editLineItem);
+            var editLineItem = App.Container?.Resolve<EditLineItem>();
+            if(editLineItem != null)
+            {
+                editLineItem.ViewModel.HandleSubmit += OnAdded;
+                await NavigationProvider.Navigation.PushModalAsync(editLineItem);
+            }
         }
 
         private async void Edit(OrderLineItem lineItem)
         {
             if(null != lineItem)
             {
-                var editLineItem = App.Container.Resolve<EditLineItem>();
-                editLineItem.ViewModel.HandleSubmit += OnEdited;
-                editLineItem.ViewModel.HandleDelete += OnDeleted;
-                editLineItem.ViewModel.LineItem = lineItem;
-                await NavigationProvider.Navigation.PushModalAsync(editLineItem);
+                var editLineItem = App.Container?.Resolve<EditLineItem>();
+                if(editLineItem != null)
+                {
+                    editLineItem.ViewModel.HandleSubmit += OnEdited;
+                    editLineItem.ViewModel.HandleDelete += OnDeleted;
+                    editLineItem.ViewModel.LineItem = lineItem;
+                    await NavigationProvider.Navigation.PushModalAsync(editLineItem);
+                }
             }
         }
 

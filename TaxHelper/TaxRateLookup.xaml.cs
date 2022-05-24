@@ -12,9 +12,12 @@ namespace TaxHelper
         public TaxRateLookup()
         {
             InitializeComponent();
-            var taxRateLookupViewModel = App.Container.Resolve<TaxRateLookupViewModel>();
-            taxRateLookupViewModel.HandleError += ShowAlert;
-            BindingContext = taxRateLookupViewModel;
+            var taxRateLookupViewModel = App.Container?.Resolve<TaxRateLookupViewModel>();
+            if(taxRateLookupViewModel != null)
+            {
+                taxRateLookupViewModel.HandleError += ShowAlert;
+                BindingContext = taxRateLookupViewModel;
+            }
         }
 
         private async void ShowAlert(string message)
