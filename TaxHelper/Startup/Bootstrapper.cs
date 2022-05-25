@@ -2,6 +2,7 @@
 using Autofac;
 using TaxHelper.Services;
 using TaxHelper.ViewModels;
+using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.Startup

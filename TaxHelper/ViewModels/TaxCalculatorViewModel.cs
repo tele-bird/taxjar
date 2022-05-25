@@ -4,41 +4,29 @@ using System.Linq;
 using System.Windows.Input;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
+using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
     public class TaxCalculatorViewModel : StickyViewModel<Order>
     {
-        private string mLineItemsDescription;
         public string LineItemsDescription
         {
-            get { return mLineItemsDescription; }
-            set
-            {
-                mLineItemsDescription = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<string>(); }
+            set { SetValue<string>(value); }
         }
-
-        private string mAddressesDescription;
         public string AddressesDescription
         {
-            get { return mAddressesDescription; }
-            set
-            {
-                mAddressesDescription = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<string>(); }
+            set { SetValue<string>(value); }
         }
 
-        public ICommand ViewLineItemsCommand { get; set; }
+        public ICommand ViewLineItemsCommand { get; private set; }
+        public ICommand ViewNexusAddressesCommand { get; private set; }
+        public ICommand GetTaxCommand { get; private set; }
 
-        public ICommand ViewNexusAddressesCommand { get; set; }
-
-        public ICommand GetTaxCommand { get; set; }
-
-        private ITaxService mTaxService { get; }
+        private readonly ITaxService mTaxService;
 
         public TaxCalculatorViewModel(INavigationProvider navigationProvider, IOrderSettingsService orderSettingsService, ITaxService taxService)
             : base(navigationProvider, orderSettingsService)

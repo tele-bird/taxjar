@@ -11,8 +11,7 @@ namespace TaxHelper.ViewModels
         {
             get
             {
-                var appSettingsDto = mAppSettingsService.Settings;
-                return appSettingsDto.TaxJarApiKey;
+                return mAppSettingsService.Settings.TaxJarApiKey;
             }
             set
             {

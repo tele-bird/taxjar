@@ -9,27 +9,15 @@ namespace TaxHelper.ViewModels
 {
     public class EditLineItemViewModel : BaseViewModel
     {
-        private OrderLineItem mLineItem;
         public OrderLineItem LineItem
         {
-            get { return mLineItem; }
-            set
-            {
-                mLineItem = value;
-                OnPropertyChanged();
-                IsDeleteButtonVisible = (value != null) && (HandleDelete != null);
-            }
+            get { return GetValue<OrderLineItem>(); }
+            set { SetValue<OrderLineItem>(value); }
         }
-
-        private bool mIsDeleteButtonVisible;
         public bool IsDeleteButtonVisible
         {
-            get { return mIsDeleteButtonVisible; }
-            set
-            {
-                mIsDeleteButtonVisible = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<bool>(); }
+            set { SetValue<bool>(value); }
         }
 
         public ICommand SubmitCommand { get; private set; }
@@ -42,10 +30,19 @@ namespace TaxHelper.ViewModels
         public EditLineItemViewModel(INavigationProvider navigationProvider)
             : base(navigationProvider)
         {
+            PropertyChanged += EditLineItemViewModel_PropertyChanged;
             SubmitCommand = new Command(Submit);
             CancelCommand = new Command(Cancel);
             DeleteCommand = new Command(Delete);
             LineItem = new OrderLineItem();
+        }
+
+        private void EditLineItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName.Equals(nameof(LineItem)))
+            {
+                IsDeleteButtonVisible = (LineItem != null) && (HandleDelete != null);
+            }
         }
 
         private async void Delete(object obj)

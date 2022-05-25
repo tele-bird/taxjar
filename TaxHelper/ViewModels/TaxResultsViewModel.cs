@@ -6,18 +6,17 @@ namespace TaxHelper.ViewModels
 {
     public class TaxResultsViewModel : BaseViewModel
     {
-        private string mResult;
         public string Result
         {
-            get { return mResult; }
-            set
-            {
-                mResult = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<string>(); }
+            set { SetValue<string>(value); }
         }
 
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return GetValue<string>(); }
+            set { SetValue<string>(value); }
+        }
 
         public TaxResultsViewModel(INavigationProvider navigationProvider)
             : base(navigationProvider)

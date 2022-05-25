@@ -4,14 +4,16 @@ using System.Windows.Input;
 using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
+using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
     public class TaxRateLookupViewModel : StickyViewModel<TaxLocation>
     {
-        public ICommand GetTaxRatesCommand { get; set; }
-        private ITaxService mTaxService { get; }
+        public ICommand GetTaxRatesCommand { get; private set; }
+
+        public readonly ITaxService mTaxService;
 
         public TaxRateLookupViewModel(INavigationProvider navigationProvider, ITaxLocationSettingsService taxLocationSettingsService, ITaxService taxService)
             : base(navigationProvider, taxLocationSettingsService)

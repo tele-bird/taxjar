@@ -5,7 +5,7 @@
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     xmlns:behaviors="clr-namespace:TaxHelper.Behaviors"
     xmlns:converters="clr-namespace:TaxHelper.Converters"
-    x:Class="TaxHelper.ViewLineItems"
+    x:Class="TaxHelper.Views.ViewLineItems"
     ios:Page.UseSafeArea="true"
     Title="{Binding Title}">
     <ContentPage.Resources>

@@ -8,52 +8,34 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
+using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
     public class ViewLineItemsViewModel : BaseViewModel
     {
-        public ObservableCollection<OrderLineItem> LineItems { get; private set; } = new ObservableCollection<OrderLineItem>();
-
         public ICommand LineItemSelectedCommand { get; private set; }
         public ICommand DoneCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
 
         public Action<OrderLineItem[]> HandleDone { get; set; }
 
-        private string mTitle;
+        public ObservableCollection<OrderLineItem> LineItems
+        {
+            get { return GetValue<ObservableCollection<OrderLineItem>>(); }
+            set { SetValue<ObservableCollection<OrderLineItem>>(value); }
+        }
         public string Title
         {
-            get { return mTitle; }
-            set
-            {
-                mTitle = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<string>(); }
+            set { SetValue<string>(value); }
         }
-
-        private bool mIsRefreshing;
         public bool IsRefreshing
         {
-            get { return mIsRefreshing; }
-            set
-            {
-                mIsRefreshing = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<bool>(); }
+            set { SetValue<bool>(value); }
         }
-
-        public void SetLineItems(params OrderLineItem[] lineItems)
-        {
-            LineItems.Clear();
-            foreach(var lineItem in lineItems)
-            {
-                LineItems.Add(lineItem);
-            }
-            Title = $"{LineItems.Count} Line Items";
-        }
-
-        public ICommand AddCommand { get; set; }
 
         public ViewLineItemsViewModel(INavigationProvider navigationProvider, params OrderLineItem[] lineItems)
             : base(navigationProvider)
@@ -61,6 +43,16 @@ namespace TaxHelper.ViewModels
             LineItemSelectedCommand = new Command<OrderLineItem>(Edit);
             DoneCommand = new Command(Done);
             AddCommand = new Command(Add);
+            LineItems = new ObservableCollection<OrderLineItem>();
+            foreach (var lineItem in lineItems)
+            {
+                LineItems.Add(lineItem);
+            }
+            Title = $"{LineItems.Count} Line Items";
+        }
+
+        public void SetLineItems(params OrderLineItem[] lineItems)
+        {
             LineItems.Clear();
             foreach (var lineItem in lineItems)
             {

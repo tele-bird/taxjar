@@ -5,7 +5,7 @@ using TaxHelper.Common.Models;
 using TaxHelper.ViewModels;
 using Xamarin.Forms;
 
-namespace TaxHelper
+namespace TaxHelper.Views
 {
     public partial class ViewLineItems : ContentPage
     {

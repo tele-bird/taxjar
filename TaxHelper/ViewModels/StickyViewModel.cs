@@ -23,20 +23,15 @@ namespace TaxHelper.ViewModels
     {
         private bool mAppeared;
 
-        private T mStickyDto;
         public T StickyDto
         {
-            get { return mStickyDto; }
-            protected set
-            {
-                mStickyDto = value;
-                OnPropertyChanged();
-            }
+            get { return GetValue<T>(); }
+            protected set { SetValue<T>(value); }
         }
 
         public ICommand AppearingCommand { get; set; }
-
         public ICommand DisappearingCommand { get; set; }
+
         private ISettingsService<T> mSettingsService;
 
         protected StickyViewModel(INavigationProvider navigationProvider, ISettingsService<T> settingsService)
