@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
+using System.Threading.Tasks;
 using TaxHelper.Services;
-using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        protected INavigationProvider NavigationProvider { get; set; }
+        private readonly IAlertHelper mAlertHelper;
 
-        public Action<string> HandleError { get; set; }
-
-        protected BaseViewModel(INavigationProvider navigationProvider)
+        protected BaseViewModel(IAlertHelper alertHelper)
         {
-            NavigationProvider = navigationProvider;
+            mAlertHelper = alertHelper;
+        }
+
+        protected void ShowAlert(string title, string message, string cancel)
+        {
+            mAlertHelper.ShowAlert(title, message, cancel);
         }
 
         #region INotifyPropertyChanged
@@ -28,35 +30,69 @@ namespace TaxHelper.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-		#endregion
+        #endregion
 
-		Dictionary<string, object> properties = new Dictionary<string, object>();
+        #region property storage in Dictionary
+
+        private Dictionary<string, object> mPropertyValuesByName = new Dictionary<string, object>();
 
 		protected void SetValue<T>(T value, [CallerMemberName] string propertyName = null)
 		{
-			if (!properties.ContainsKey(propertyName))
+			if (!mPropertyValuesByName.ContainsKey(propertyName))
 			{
-				properties.Add(propertyName, default(T));
+				mPropertyValuesByName.Add(propertyName, default(T));
 			}
 
 			var oldValue = GetValue<T>(propertyName);
 			if (!EqualityComparer<T>.Default.Equals(oldValue, value))
 			{
-				properties[propertyName] = value;
+				mPropertyValuesByName[propertyName] = value;
 				OnPropertyChanged(propertyName);
 			}
 		}
 
 		protected T GetValue<T>([CallerMemberName] string propertyName = null)
 		{
-			if (!properties.ContainsKey(propertyName))
+			if (!mPropertyValuesByName.ContainsKey(propertyName))
 			{
 				return default(T);
 			}
 			else
 			{
-				return (T)properties[propertyName];
+				return (T)mPropertyValuesByName[propertyName];
 			}
 		}
-	}
+
+        #endregion
+
+        #region Navigation
+
+        public Func<BaseViewModel,Task> NavigationPushDelegate;
+        public Func<BaseViewModel,Task> NavigationPushModalDelegate;
+        public Func<Task> NavigationPopDelegate;
+        public Func<Task> NavigationPopModalDelegate;
+
+        public async Task NavigatePushAsync<TViewModel>(TViewModel targetViewModel) where TViewModel : BaseViewModel
+        {
+            await NavigationPushDelegate?.Invoke(targetViewModel);
+        }
+
+        public async Task NavigatePushModalAsync<TViewModel>(TViewModel targetViewModel) where TViewModel : BaseViewModel
+        {
+            await NavigationPushModalDelegate?.Invoke(targetViewModel);
+        }
+
+        public async Task NavigatePopAsync()
+        {
+            await NavigationPopDelegate?.Invoke();
+        }
+
+        public async Task NavigatePopModalAsync()
+        {
+            await NavigationPopModalDelegate?.Invoke();
+        }
+
+
+        #endregion
+    }
 }

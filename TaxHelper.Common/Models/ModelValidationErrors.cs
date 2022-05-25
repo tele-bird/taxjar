@@ -1,5 +1,4 @@
-﻿using System;
-namespace TaxHelper.Common.Models
+﻿namespace TaxHelper.Common.Models
 {
     public static class ModelValidationErrors
     {

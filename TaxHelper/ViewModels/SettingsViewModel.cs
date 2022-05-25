@@ -1,7 +1,4 @@
-﻿using System;
-using TaxHelper.Dto;
-using TaxHelper.Services;
-using Xamarin.Forms;
+﻿using TaxHelper.Services;
 
 namespace TaxHelper.ViewModels
 {
@@ -24,8 +21,8 @@ namespace TaxHelper.ViewModels
 
         private IAppSettingsService mAppSettingsService;
 
-        public SettingsViewModel(INavigationProvider navigationProvider, IAppSettingsService appSettingsService)
-            : base(navigationProvider)
+        public SettingsViewModel(IAlertHelper alertHelper, IAppSettingsService appSettingsService)
+            : base(alertHelper)
         {
             mAppSettingsService = appSettingsService;
         }

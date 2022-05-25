@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaxHelper.Common.Exceptions;
 
 namespace TaxHelper.Common.Models

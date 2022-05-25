@@ -27,8 +27,8 @@ namespace TaxHelper.ViewModels
         public Action<OrderLineItem> HandleSubmit { get; set; }
         public Action<OrderLineItem> HandleDelete { get; set; }
 
-        public EditLineItemViewModel(INavigationProvider navigationProvider)
-            : base(navigationProvider)
+        public EditLineItemViewModel(IAlertHelper alertHelper)
+            : base(alertHelper)
         {
             PropertyChanged += EditLineItemViewModel_PropertyChanged;
             SubmitCommand = new Command(Submit);
@@ -47,13 +47,13 @@ namespace TaxHelper.ViewModels
 
         private async void Delete(object obj)
         {
-            await NavigationProvider.Navigation.PopModalAsync();
+            await NavigatePopModalAsync();
             HandleDelete(LineItem);
         }
 
         private async void Cancel(object obj)
         {
-            await NavigationProvider.Navigation.PopModalAsync();
+            await NavigatePopModalAsync();
         }
 
         private async void Submit()
@@ -62,7 +62,7 @@ namespace TaxHelper.ViewModels
             try
             {
                 LineItem.ThrowIfInvalid();
-                await NavigationProvider.Navigation.PopModalAsync();
+                await NavigatePopModalAsync();
                 HandleSubmit(LineItem);
             }
             catch (ModelValidationException exc)
@@ -73,7 +73,7 @@ namespace TaxHelper.ViewModels
             {
                 if (null != errorMessage)
                 {
-                    HandleError(errorMessage);
+                    ShowAlert("Error", errorMessage, "OK");
                 }
             }
         }

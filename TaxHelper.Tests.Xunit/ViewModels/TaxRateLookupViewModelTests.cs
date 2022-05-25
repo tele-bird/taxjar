@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
 using TaxHelper.ViewModels;
-using Xamarin.Forms;
 using Xunit;
 
 namespace TaxHelper.Tests.Xunit.ViewModels
@@ -28,16 +26,14 @@ namespace TaxHelper.Tests.Xunit.ViewModels
         public void TaxRateQueryInvoked()
         {
             // arrange
-            var navigationProviderMock = new Mock<INavigationProvider>();
-            navigationProviderMock.SetupGet(np => np.Navigation)
-                .Returns((INavigation)null);
+            var alertHelperMock = new Mock<IAlertHelper>();
             var taxLocationSettingsServiceMock = new Mock<ITaxLocationSettingsService>();
             taxLocationSettingsServiceMock.SetupProperty(tlss => tlss.Settings, TAX_LOCATION);
             var taxServiceMock = new Mock<ITaxService>();
             taxServiceMock.Setup(ts => ts.GetTaxRatesForLocation(TAX_LOCATION))
                 .Callback(GetTaxRatesForLocation_Callback)
                 .Returns(Task.FromResult(EXPECTED_TAX_RATES_JSON));
-            var taxRateLookupViewModel = new TaxRateLookupViewModel(navigationProviderMock.Object, taxLocationSettingsServiceMock.Object, taxServiceMock.Object);
+            var taxRateLookupViewModel = new TaxRateLookupViewModel(alertHelperMock.Object, taxLocationSettingsServiceMock.Object, taxServiceMock.Object);
 
             // act
             taxRateLookupViewModel.LookupTaxRates();

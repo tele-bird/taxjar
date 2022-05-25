@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using TaxHelper.Common.Models;
 using Xamarin.Essentials;
 
 namespace TaxHelper.Services

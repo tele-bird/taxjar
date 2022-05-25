@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaxHelper.Common.Models;
 using TaxHelper.ViewModels;
-using Xamarin.Forms;
 
 namespace TaxHelper.Views
 {
-    public partial class ViewLineItems : ContentPage
+    public partial class ViewLineItems : BaseContentPage<ViewLineItemsViewModel>
     {
-        public ViewLineItemsViewModel ViewModel => (ViewLineItemsViewModel)BindingContext;
         public Action<OrderLineItem[]> HandleUpdate { get; }
 
-        public ViewLineItems(ViewLineItemsViewModel viewLineItemsViewModel)
+        public ViewLineItems()
         {
             InitializeComponent();
-            viewLineItemsViewModel.HandleError += ShowAlert;
-            BindingContext = viewLineItemsViewModel;
         }
 
         private async void ShowAlert(string message)

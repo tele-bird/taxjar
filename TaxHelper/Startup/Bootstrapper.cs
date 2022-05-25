@@ -1,20 +1,17 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using TaxHelper.Services;
 using TaxHelper.ViewModels;
-using TaxHelper.Views;
-using Xamarin.Forms;
 
 namespace TaxHelper.Startup
 {
     public class Bootstrapper
     {
-        public IContainer Bootstrap(INavigationProvider navigationProvider)
+        public IContainer Bootstrap(App app)
         {
             var builder = new ContainerBuilder();
 
             // register services:
-            builder.RegisterInstance(navigationProvider).As<INavigationProvider>();
+            builder.RegisterInstance<IAlertHelper>(new AlertHelper(app));
             builder.RegisterType<AppSettingsService>().As<IAppSettingsService>().SingleInstance();
             builder.RegisterType<OrderSettingsService>().As<IOrderSettingsService>().SingleInstance();
             builder.RegisterType<TaxService>().As<ITaxService>().SingleInstance();
@@ -29,14 +26,6 @@ namespace TaxHelper.Startup
             builder.RegisterType<TaxRateLookupViewModel>().AsSelf();
             builder.RegisterType<TaxResultsViewModel>().AsSelf();
             builder.RegisterType<ViewLineItemsViewModel>().AsSelf();
-
-            // register views:
-            builder.RegisterType<TaxRateLookup>().AsSelf();
-            builder.RegisterType<TaxResults>().AsSelf();
-            builder.RegisterType<TaxCalculator>().AsSelf();
-            builder.RegisterType<ViewLineItems>().AsSelf();
-            builder.RegisterType<EditLineItem>().AsSelf();
-            builder.RegisterType<Settings>().AsSelf();
 
             return builder.Build();
         }

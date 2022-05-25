@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
+<views:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TaxHelper.ViewModels"
+    xmlns:views="clr-namespace:TaxHelper.Views"
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     xmlns:behaviors="clr-namespace:TaxHelper.Behaviors"
     xmlns:converters="clr-namespace:TaxHelper.Converters"
+    x:TypeArguments="vm:ViewLineItemsViewModel"
     x:Class="TaxHelper.Views.ViewLineItems"
-    ios:Page.UseSafeArea="true"
-    Title="{Binding Title}">
+    ios:Page.UseSafeArea="true">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
@@ -68,4 +70,4 @@
             <Button Text="Done" Style="{StaticResource buttonStyle}" Command="{Binding DoneCommand}"/>
         </StackLayout>
     </ContentPage.Content>
-</ContentPage>
+</views:BaseContentPage>

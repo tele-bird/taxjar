@@ -1,10 +1,8 @@
 ﻿using Autofac;
 using System;
 using System.Windows.Input;
-using TaxHelper.Common.Exceptions;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
-using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
@@ -15,8 +13,8 @@ namespace TaxHelper.ViewModels
 
         public readonly ITaxService mTaxService;
 
-        public TaxRateLookupViewModel(INavigationProvider navigationProvider, ITaxLocationSettingsService taxLocationSettingsService, ITaxService taxService)
-            : base(navigationProvider, taxLocationSettingsService)
+        public TaxRateLookupViewModel(IAlertHelper alertHelper, ITaxLocationSettingsService taxLocationSettingsService, ITaxService taxService)
+            : base(alertHelper, taxLocationSettingsService)
         {
             GetTaxRatesCommand = new Command(LookupTaxRates);
             mTaxService = taxService;
@@ -34,13 +32,10 @@ namespace TaxHelper.ViewModels
                 var result = await mTaxService.GetTaxRatesForLocation(StickyDto);
 
                 // navigate to results page:
-                var taxResults = App.Container?.Resolve<TaxResults>();
-                if(taxResults != null)
-                {
-                    taxResults.ViewModel.Result = result;
-                    taxResults.ViewModel.Title = "Tax Rates";
-                    await NavigationProvider.Navigation?.PushAsync(taxResults);
-                }
+                var taxResultsViewModel = App.Container.Resolve<TaxResultsViewModel>();
+                taxResultsViewModel.Result = result;
+                taxResultsViewModel.Title = "Tax Rates";
+                await NavigatePushAsync(taxResultsViewModel);
             }
             catch (Exception exc)
             {
@@ -50,7 +45,7 @@ namespace TaxHelper.ViewModels
             {
                 if (null != errorMessage)
                 {
-                    HandleError(errorMessage);
+                    ShowAlert("Error", errorMessage, "OK");
                 }
             }
         }

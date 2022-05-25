@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using TaxHelper.Dto;
-using TaxHelper.Services;
 using TaxHelper.Startup;
 using Xamarin.Forms;
 
@@ -15,8 +13,7 @@ namespace TaxHelper
             InitializeComponent();
             MainPage = new AppShell();
             var bootStrapper = new Bootstrapper();
-            var navigationProvider = new NavigationProvider(this.MainPage.Navigation);
-            Container = bootStrapper.Bootstrap(navigationProvider);
+            Container = bootStrapper.Bootstrap(this);
         }
 
         protected override void OnStart()

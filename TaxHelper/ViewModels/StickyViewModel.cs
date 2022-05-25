@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using TaxHelper.Services;
 using Xamarin.Forms;
 
@@ -34,8 +33,8 @@ namespace TaxHelper.ViewModels
 
         private ISettingsService<T> mSettingsService;
 
-        protected StickyViewModel(INavigationProvider navigationProvider, ISettingsService<T> settingsService)
-            : base(navigationProvider)
+        protected StickyViewModel(IAlertHelper alertHelper, ISettingsService<T> settingsService)
+            : base(alertHelper)
         {
             mAppeared = false;
             AppearingCommand = new Command(OnAppearing);

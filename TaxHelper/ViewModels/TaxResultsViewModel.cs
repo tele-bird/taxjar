@@ -1,6 +1,4 @@
-﻿using System;
-using TaxHelper.Services;
-using Xamarin.Forms;
+﻿using TaxHelper.Services;
 
 namespace TaxHelper.ViewModels
 {
@@ -18,8 +16,8 @@ namespace TaxHelper.ViewModels
             set { SetValue<string>(value); }
         }
 
-        public TaxResultsViewModel(INavigationProvider navigationProvider)
-            : base(navigationProvider)
+        public TaxResultsViewModel(IAlertHelper alertHelper)
+            : base(alertHelper)
         {
         }
     }

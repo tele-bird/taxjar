@@ -1,17 +1,12 @@
-﻿using System;
-using TaxHelper.ViewModels;
-using Xamarin.Forms;
+﻿using TaxHelper.ViewModels;
 
 namespace TaxHelper.Views
 {
-    public partial class TaxResults : ContentPage
+    public partial class TaxResults : BaseContentPage<TaxResultsViewModel>
     {
-        public TaxResultsViewModel ViewModel => (TaxResultsViewModel)BindingContext;
-
-        public TaxResults(TaxResultsViewModel taxResultsViewModel)
+        public TaxResults()
         {
             InitializeComponent();
-            BindingContext = taxResultsViewModel;
         }
     }
 }

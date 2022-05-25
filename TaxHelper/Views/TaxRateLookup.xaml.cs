@@ -1,11 +1,9 @@
 ﻿using Autofac;
-using System;
 using TaxHelper.ViewModels;
-using Xamarin.Forms;
 
 namespace TaxHelper.Views
 {
-    public partial class TaxRateLookup : ContentPage
+    public partial class TaxRateLookup : BaseContentPage<TaxRateLookupViewModel>
     {
         // todo: force Shell to use Container.Resolve() instead of using the empty constructor
         //public TaxRateLookup(TaxRateLookupViewModel taxRateLookupViewModel)
@@ -15,8 +13,7 @@ namespace TaxHelper.Views
             var taxRateLookupViewModel = App.Container?.Resolve<TaxRateLookupViewModel>();
             if(taxRateLookupViewModel != null)
             {
-                taxRateLookupViewModel.HandleError += ShowAlert;
-                BindingContext = taxRateLookupViewModel;
+                ViewModel = taxRateLookupViewModel;
             }
         }
 
@@ -28,13 +25,13 @@ namespace TaxHelper.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ((TaxRateLookupViewModel)BindingContext).AppearingCommand.Execute(null);
+            ViewModel.AppearingCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ((TaxRateLookupViewModel)BindingContext).DisappearingCommand.Execute(null);
+            ViewModel.DisappearingCommand.Execute(null);
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using TaxHelper.Common.Models;
 using TaxHelper.Services;
-using TaxHelper.Views;
 using Xamarin.Forms;
 
 namespace TaxHelper.ViewModels
@@ -28,8 +27,8 @@ namespace TaxHelper.ViewModels
 
         private readonly ITaxService mTaxService;
 
-        public TaxCalculatorViewModel(INavigationProvider navigationProvider, IOrderSettingsService orderSettingsService, ITaxService taxService)
-            : base(navigationProvider, orderSettingsService)
+        public TaxCalculatorViewModel(IAlertHelper alertHelper, IOrderSettingsService orderSettingsService, ITaxService taxService)
+            : base(alertHelper, orderSettingsService)
         {
             ViewLineItemsCommand = new Command(ViewLineItems);
             ViewNexusAddressesCommand = new Command(ViewNexusAddresses);
@@ -39,18 +38,15 @@ namespace TaxHelper.ViewModels
 
         private async void ViewLineItems()
         {
-            var viewLineItems = App.Container?.Resolve<ViewLineItems>();
-            if(viewLineItems != null)
-            {
-                viewLineItems.ViewModel.SetLineItems(StickyDto.LineItems.ToArray());
-                viewLineItems.ViewModel.HandleDone += OnLineItemsUpdated;
-                await NavigationProvider.Navigation?.PushModalAsync(viewLineItems);
-            }
+            var viewLineItemsViewModel = App.Container.Resolve<ViewLineItemsViewModel>();
+            viewLineItemsViewModel.HandleDone += OnLineItemsUpdated;
+            viewLineItemsViewModel.SetLineItems(StickyDto.LineItems.ToArray());
+            await NavigatePushModalAsync(viewLineItemsViewModel);
         }
 
         private void ViewNexusAddresses()
         {
-            HandleError("View addresses is not plugged in yet.");
+            ShowAlert("Error", "View addresses is not plugged in yet.", "OK");
         }
 
         private void OnLineItemsUpdated(OrderLineItem[] updatedLineItems)
@@ -96,13 +92,10 @@ namespace TaxHelper.ViewModels
                 var result = await mTaxService.GetTaxesForOrder(StickyDto);
 
                 // navigate to results page:
-                var taxResults = App.Container?.Resolve<TaxResults>();
-                if(taxResults != null)
-                {
-                    taxResults.ViewModel.Result = result;
-                    taxResults.ViewModel.Title = "Tax Calculation";
-                    await NavigationProvider.Navigation?.PushAsync(taxResults);
-                }
+                var taxResultsViewModel = App.Container.Resolve<TaxResultsViewModel>();
+                taxResultsViewModel.Result = result;
+                taxResultsViewModel.Title = "Tax Calculator";
+                await NavigatePushAsync(taxResultsViewModel);
             }
             catch (Exception exc)
             {
@@ -112,7 +105,7 @@ namespace TaxHelper.ViewModels
             {
                 if (null != errorMessage)
                 {
-                    HandleError(errorMessage);
+                    ShowAlert("Error", errorMessage, "OK");
                 }
             }
         }

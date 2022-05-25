@@ -1,24 +1,12 @@
-﻿using System;
-using TaxHelper.Common.Models;
-using TaxHelper.ViewModels;
-using Xamarin.Forms;
+﻿using TaxHelper.ViewModels;
 
 namespace TaxHelper.Views
 {
-    public partial class EditLineItem : ContentPage
+    public partial class EditLineItem : BaseContentPage<EditLineItemViewModel>
     {
-        public EditLineItemViewModel ViewModel => (EditLineItemViewModel)BindingContext;
-
-        public EditLineItem(EditLineItemViewModel editLineItemViewModel)
+        public EditLineItem()
         {
             InitializeComponent();
-            editLineItemViewModel.HandleError += ShowAlert;
-            BindingContext = editLineItemViewModel;
-        }
-
-        private async void ShowAlert(string message)
-        {
-            await this.DisplayAlert("Error", message, "OK");
         }
     }
 }

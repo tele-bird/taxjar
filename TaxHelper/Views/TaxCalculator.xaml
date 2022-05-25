@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaxHelper.Views.TaxCalculator"
-             Title="Tax Calculator">
+<views:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TaxHelper.ViewModels"
+    xmlns:views="clr-namespace:TaxHelper.Views"
+    x:TypeArguments="vm:TaxCalculatorViewModel"
+    x:Class="TaxHelper.Views.TaxCalculator"
+    Title="Tax Calculator">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="labelStyle" TargetType="Label">
@@ -97,4 +101,4 @@
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
-</ContentPage>
+</views:BaseContentPage>
